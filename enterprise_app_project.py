@@ -15,9 +15,10 @@ import signal
 from config import SECRET_KEY
 from data_gateway import load_data_handlers, table_names, store_data, \
     init_data_gateway, load_data, store_data_handlers
+from model_objects import Customer
 from model_ops import get_user_by_id, user_data_loader, get_user_by_username, \
     customer_data_loader, user_data_storage_handler, \
-    customer_data_storage_handler
+    customer_data_storage_handler, get_customer_by_username
 
 ################################################################################
 # DEFINES
@@ -98,6 +99,17 @@ def account_page_controller():
     :return:
     """
     template_values = get_template_values('account')
+    if current_user.user_type == 'admin':
+        customer = Customer()
+    else:
+        customer = get_customer_by_username(current_user.username)
+    template_values['person_name'] = customer.person_name
+    template_values['billing_address'] = customer.billing_address
+    template_values['shipping_address'] = customer.shipping_address
+    template_values['email'] = customer.email_address
+    template_values['rating'] = customer.rating
+    template_values['username'] = current_user.username
+
     if request.method == 'GET':
         return render_template('account.html', **template_values)
 

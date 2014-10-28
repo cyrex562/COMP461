@@ -96,12 +96,25 @@ def get_user_by_username(in_username):
     return out_user
 
 
+def get_customer_by_username(username):
+    found_customer = None
+    user = get_user_by_username(username)
+    if user is not None:
+        customers = get_all_customers()
+        for customer in customers:
+            if user.id == customer.user_id:
+                found_customer = customer
+                break
+    return found_customer
+
+
 def user_data_loader(soup):
     users = soup.data.users
     for user_child_xml in users.children:
         if user_child_xml.string != '\n':
             user_to_add = User()
             user_to_add.id = user_child_xml['id']
+            user_to_add.user_type = user_child_xml['user_type']
             user_to_add.username = \
                 unicode(user_child_xml.username.contents[0].string.strip())
             user_to_add.password = \

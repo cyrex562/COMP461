@@ -1,6 +1,6 @@
 <data>
  <users>
-  <user id="0">
+  <user id="0" user_type="admin">
    <username>
     admin
    </username>
@@ -8,7 +8,7 @@
     admin
    </password>
   </user>
-  <user id="1">
+  <user id="1" user_type="user">
    <username>
     test_user
    </username>
@@ -16,7 +16,7 @@
     test
    </password>
   </user>
-  <user id="2">
+  <user id="2" user_type="user">
    <username>
     test1
    </username>

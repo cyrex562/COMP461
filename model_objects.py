@@ -65,6 +65,7 @@ class User(UserMixin):
         self.password = ''
         self.pass_hash = ''
         self.salt = ''
+        self.user_type = 'user'
 
     def is_active(self):
         return True

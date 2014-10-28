@@ -4,69 +4,62 @@
         <fieldset id="user-information">
             <legend>User Information</legend>
             <fieldset>
-                <legend>User Information</legend>
                 <div class="form-group">
                     <label for="person-name">Name</label>
                     <input type="text" name="person-name"
-                           id="person-name"
-                           class="form-control">
+                           id="person-name" class="form-control"
+                           value="{{ person_name }}">
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username"
-                           class="form-control">
+                           class="form-control" value="{{ username }}" >
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password"
-                           id="password"
-                           class="form-control">
+                    <label for="email">E-mail address</label>
+                    <input type="text" name="email" id="email"
+                           class="form-control" value="{{ email }}">
                 </div>
                 <div class="form-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" name="confirm-password"
-                           id="confirm-password"
-                           class="form-control">
+                    <label for="rating">Rating</label>
+                    <input type="text" name="rating" id="rating"
+                           class="form-control" value="{{ rating }}">
                 </div>
-                <div class="form-group">
-                    <label for="secret-question">Secret Question</label>
-                    <input type="text" name="secret-question"
-                           id="secret-question"
-                           class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="secret-answer">Secret Answer</label>
-                    <input type="text" name="secret-answer"
-                           id="secret-answer"
-                           class="form-control">
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Billing Address</legend>
                 <div class="form-group">
                     <label for="billing-address">Address</label>
                     <input type="text" name="billing-address"
                            id="billing-address"
-                           class="form-control">
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Shipping Address</legend>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"
-                               name="use-billing-address"
-                               value=""
-                               id="use-billing-address">
-                        Use Billing Address
-                    </label>
+                           class="form-control" value="{{ billing_address }}">
                 </div>
                 <div class="form-group">
                     <label for="shipping-address">Address</label>
                     <input type="text" name="Shipping-address"
-                           id="shipping-address"
-                           class="form-control">
+                           id="shipping-address" class="form-control"
+                           value="{{ shipping_address }}">
                 </div>
+{#                <div class="form-group">#}
+{#                    <label for="password">Password</label>#}
+{#                    <input type="password" name="password"#}
+{#                           id="password" class="form-control">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="confirm-password">Confirm Password</label>#}
+{#                    <input type="password" name="confirm-password"#}
+{#                           id="confirm-password"#}
+{#                           class="form-control">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="secret-question">Secret Question</label>#}
+{#                    <input type="text" name="secret-question"#}
+{#                           id="secret-question"#}
+{#                           class="form-control">#}
+{#                </div>#}
+{#                <div class="form-group">#}
+{#                    <label for="secret-answer">Secret Answer</label>#}
+{#                    <input type="text" name="secret-answer"#}
+{#                           id="secret-answer"#}
+{#                           class="form-control">#}
+{#                </div>#}
             </fieldset>
         </fieldset>
         <fieldset id="order-history">
