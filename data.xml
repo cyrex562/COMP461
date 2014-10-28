@@ -1,0 +1,52 @@
+<data>
+ <users>
+  <user id="0">
+   <username>
+    admin
+   </username>
+   <password>
+    admin
+   </password>
+  </user>
+  <user id="1">
+   <username>
+    test_user
+   </username>
+   <password>
+    test
+   </password>
+  </user>
+  <user id="2">
+   <username>
+    test1
+   </username>
+   <password>
+    test1
+   </password>
+  </user>
+ </users>
+ <customers>
+  <customer id="0">
+   <user_id>
+    2
+   </user_id>
+   <billing_address>
+    1234 a st, a city, aa, 12345
+   </billing_address>
+   <shipping_address>
+    1234 a st, a city, aa, 12345
+   </shipping_address>
+   <email_address>
+    test@test.com
+   </email_address>
+   <person_name>
+    test
+   </person_name>
+   <rating>
+    0
+   </rating>
+  </customer>
+ </customers>
+ <products>
+ </products>
+</data>

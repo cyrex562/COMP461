@@ -7,222 +7,171 @@
 ################################################################################
 # IMPORTS
 ################################################################################
+from data_gateway import get_table, load_data_handlers, add_table_row, \
+    store_data
+from model_objects import User, Customer
 
 
 ################################################################################
 # FUNCTIONS
 ################################################################################
+def get_all_users():
+    user_table = get_table('users')
+    return user_table
 
 
-# def add_voyage(voyage):
-#     db.session.add(voyage)
-#     db.session.commit()
-#
-#
-# def add_ship(ship):
-#     db.session.add(ship)
-#     db.session.commit()
-#
-#
-# def add_waypoint(waypoint):
-#     db.session.add(waypoint)
-#     db.session.commit()
-#
-#
-# def add_trade(trade):
-#     db.session.add(trade)
-#     db.session.commit()
-#
-#
-# def add_item(item):
-#     db.session.add(item)
-#     db.session.commit()
-#
-#
-# def update_voyage(in_voyage):
-#     voyage = models.Voyage.query.filter_by(voyage_id=in_voyage.voyage_id)\
-#         .first()
-#     voyage.voyage_name = in_voyage.voyage_name
-#     voyage.voyage_notes = in_voyage.voyage_notes
-#     db.session.commit()
-#
-#
-# def update_ship(in_ship):
-#     ship = models.Ship.query.filter_by(ship_id=in_ship.ship_id).first()
-#     ship.ship_name = in_ship.ship_name
-#     ship.ship_captain = in_ship.ship_captain
-#     ship.ship_flag = in_ship.ship_flag
-#     ship.ship_notes = in_ship.ship_notes
-#     db.session.commit()
-#
-#
-# def update_waypoint(in_waypoint):
-#     waypoint = models.Waypoint.query.filter_by(
-#         waypoint_id=in_waypoint.waypoint_id).first()
-#     waypoint.waypoint_name = in_waypoint.waypoint_name
-#     waypoint.waypoint_type = in_waypoint.waypoint_type
-#     waypoint.waypoint_location = in_waypoint.waypoint_location
-#     waypoint.waypoint_notes = in_waypoint.waypoint_notes
-#     waypoint.start_date = in_waypoint.start_date
-#     waypoint.end_date = in_waypoint.end_date
-#     db.session.commit()
-#
-#
-# # FIXME: update this method
-# def update_item(item):
-#     db.session.add(item)
-#     db.session.commit()
-#
-#
-# # FIXME: update this method
-# def update_trade(trade):
-#     db.session.add(trade)
-#     db.session.commit()
-#
-#
-# def delete_voyage(voyage):
-#     db.session.delete(voyage)
-#     db.session.commit()
-#
-#
-# def delete_ship(ship):
-#     db.session.delete(ship)
-#     db.session.commit()
-#
-#
-# def delete_waypoint(waypoint):
-#     db.session.delete(waypoint)
-#     db.session.commit()
-#
-#
-# def delete_trade(trade):
-#     db.session.delete(trade)
-#     db.session.commit()
-#
-#
-# def delete_item(item):
-#     db.session.delete(item)
-#     db.session.commit()
-#
-#
-# def delete_voyages_by_id(voyage_ids):
-#     for v in voyage_ids:
-#         voyage = models.Voyage.query.filter_by(voyage_id=v).first()
-#         db.session.delete(voyage)
-#     db.session.commit()
-#
-#
-# def delete_ships_by_id(ship_ids):
-#     for s in ship_ids:
-#         ship = models.Ship.query.filter_by(ship_id=s).first()
-#         db.session.delete(ship)
-#     db.session.commit()
-#
-#
-# def delete_waypoints_by_id(waypoint_ids):
-#     for w in waypoint_ids:
-#         waypoint = models.Waypoint.query.filter_by(waypoint_id=w).first()
-#         db.session.delete(waypoint)
-#     db.session.commit()
-#
-#
-# # TODO: create delete trade by id method
-# # TODO: create delete item by id method
-#
-#
-# def get_all_voyages():
-#     return models.Voyage.query.all()
-#
-#
-# def get_all_ships():
-#     return db.session.query(models.Ship)
-#
-#
-# def get_all_waypoints():
-#     return db.session.query(models.Waypoint)
-#
-#
-# def get_all_trades():
-#     return db.session.query(models.Trade)
-#
-#
-# def get_all_items():
-#     return db.session.query(models.Item)
-#
-#
-# def get_all_voyage_ids():
-#     voyages = models.Voyage.query.all()
-#     result = []
-#     for v in voyages:
-#         result.append(v.voyage_id)
-#     return result
-#
-#
-# def get_all_ship_ids():
-#     ships = models.Ship.query.all()
-#     result = []
-#     for s in ships:
-#         result.append(s.ship_id)
-#     return result
-#
-#
-# def get_all_waypoint_ids():
-#     result = []
-#     for w in models.Waypoint.query.all():
-#         result.append(w.waypoint_id)
-#     return result
+def get_all_customers():
+    customer_table = get_table('customers')
+    return customer_table
 
 
-# TODO: create get_all_trade_ids
-# TODO: create get_all_item_ids
+def get_user_by_id(in_id):
+    found_user = None
+    users = get_all_users()
+    for u in users:
+        if u.get_id() == in_id:
+            found_user = u
+            break
+
+    out_user = None
+    if found_user is not None:
+        out_user = User()
+        out_user.username = found_user.username
+        out_user.id = found_user.id
+        out_user.login_time = found_user.login_time
+        out_user.password = found_user.password
+        out_user.pass_hash = found_user.pass_hash
+        out_user.salt = found_user.salt
+
+    return out_user
 
 
+def get_customer_by_user_id(in_user_id):
+    found_customer = None
+    customers = get_all_customers()
+    for c in customers:
+        if c.user_id == in_user_id:
+            found_customer = c
+            break
+
+    return found_customer
 
 
+def get_next_user_id():
+    users = get_all_users()
+    next_user_id = 0
+    for u in users:
+        if int(u.get_id()) > next_user_id:
+            next_user_id = int(u.get_id()) + 1
+    return next_user_id
 
 
+def get_next_customer_id():
+    customers = get_all_customers()
+    next_customer_id = 0
+    for c in customers:
+        if int(c.id) > next_customer_id:
+            next_customer_id = int(c.id) + 1
+    return next_customer_id
 
 
+def get_user_by_username(in_username):
+    found_user = None
+    users = get_all_users()
+    for u in users:
+        if u.username == in_username:
+            found_user = u
+            break
+
+    out_user = None
+    if found_user is not None:
+        out_user = User()
+        out_user.username = found_user.username
+        out_user.id = found_user.id
+        out_user.login_time = found_user.login_time
+        out_user.password = found_user.password
+        out_user.pass_hash = found_user.pass_hash
+        out_user.salt = found_user.salt
+
+    return out_user
 
 
+def user_data_loader(soup):
+    users = soup.data.users
+    for user_child_xml in users.children:
+        if user_child_xml.string != '\n':
+            user_to_add = User()
+            user_to_add.id = user_child_xml['id']
+            user_to_add.username = \
+                unicode(user_child_xml.username.contents[0].string.strip())
+            user_to_add.password = \
+                unicode(user_child_xml.password.contents[0].string.strip())
+            add_table_row('users', user_to_add)
 
 
+def customer_data_loader(soup):
+    customers = soup.data.customers
+    for customer_xml in customers.children:
+        if customer_xml.string != '\n':
+            customer_to_add = Customer()
+            customer_to_add.id = customer_xml['id']
+            customer_to_add.user_id = unicode(customer_xml.user_id.contents[
+                                                  0].string.strip())
+            customer_to_add.billing_address = unicode(
+                customer_xml.billing_address.contents[
+                    0].string.strip())
+            customer_to_add.shipping_address = unicode(
+                customer_xml.shipping_address.contents[
+                    0].string.strip())
+            customer_to_add.email_address = unicode(
+                customer_xml.email_address.contents[
+                                                  0].string.strip())
+            customer_to_add.person_name = unicode(
+                customer_xml.person_name.contents[
+                                                  0].string.strip())
+            customer_to_add.rating = unicode(customer_xml.rating.contents[
+                                                  0].string.strip())
+            add_table_row('customers', customer_to_add)
 
 
+def user_data_storage_handler(soup):
+    users = get_all_users()
+    for u in users:
+        soup.data.users.append(soup.new_tag('user', id=u.id))
+        user_xml = soup.data.users.find_all(id=u.id)[0]
+        user_xml.append(soup.new_tag('username'))
+        user_xml.username.append(u.username)
+        user_xml.append(soup.new_tag('password'))
+        user_xml.password.append(u.password)
 
 
+def customer_data_storage_handler(soup):
+    customers = get_all_customers()
+    for c in customers:
+        soup.data.customers.append(soup.new_tag('customer', id=c.id))
+        customer_xml = soup.data.customers.find_all(id=c.id)[0]
+        customer_xml.append(soup.new_tag('user_id'))
+        customer_xml.user_id.append(c.user_id)
+        customer_xml.append(soup.new_tag('billing_address'))
+        customer_xml.billing_address.append(c.billing_address)
+        customer_xml.append(soup.new_tag('shipping_address'))
+        customer_xml.shipping_address.append(c.shipping_address)
+        customer_xml.append(soup.new_tag('email_address'))
+        customer_xml.email_address.append(c.email_address)
+        customer_xml.append(soup.new_tag('person_name'))
+        customer_xml.person_name.append(c.person_name)
+        customer_xml.append(soup.new_tag('rating'))
+        customer_xml.rating.append(c.rating)
 
 
+def add_user(new_user):
+    add_table_row('users', new_user)
+    store_data()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-################################################################################
-# ENTRY POINT
-################################################################################
+def add_customer(new_customer):
+    add_table_row('customers', new_customer)
+    store_data()
 
 
 ################################################################################

@@ -30,24 +30,42 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <!-- main navbar links -->
                     <ul class="nav navbar-nav">
-                        <li class="active">
-                            <a href=" {{ url_for('catalog_page_controller') }}">
-                                Catalog
-                            </a>
+                        {% if page == 'catalog' %}
+                            <li class="active">
+                                {% else %}
+                            <li>
+                        {% endif %}
+                        <a href=" {{ url_for('catalog_page_controller') }}">
+                            Catalog
+                        </a>
                         </li>
                     </ul>
                     <!-- right side navbar links -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="{{ url_for('account_page_controller') }}">
-                                Account
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for('login_page_controller') }}">
-                                Login
-                            </a>
-                        </li>
+                        {% if current_user.is_authenticated() %}
+                            {% if page == 'account' %}
+                                <li class="active">
+                                    {% else %}
+                                <li>
+                            {% endif %}
+                                <a href="{{ url_for('account_page_controller') }}">
+                                    Account
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if not current_user.is_authenticated() %}
+                            <li>
+                                <a href="{{ url_for('login_page_controller') }}">
+                                    Login
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('logout_page_controller') }}">
+                                    Logout
+                                </a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a href="{{ url_for('cart_page_controller') }}">
                                 <span class="badge">0</span>
