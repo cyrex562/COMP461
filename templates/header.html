@@ -1,0 +1,20 @@
+{% block header %}
+    <script type=text/javascript
+            src="{{ url_for('static', filename='js/header.js') }}"></script>
+    <div id="header">
+        <h1>Jane's Voyages</h1>
+
+        <div id="status-bar">[STATUS BAR]</div>
+        <nav class="navbar navbar-default">
+            <div class="collapse navbar-collapse"
+                 id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li id="voyages-nav-btn"><a href="voyages">Voyages</a></li>
+                    <li id="ships-nav-btn"><a href="ships">Ships</a></li>
+                    <li id="waypoints-nav-btn"><a
+                            href="waypoints">Waypoints</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+{% endblock %}
