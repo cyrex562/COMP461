@@ -1,8 +1,20 @@
+<!-- header fragment -->
 {% block footer %}
-    <script type=text/javascript
-            src="{{ url_for('static', filename='js/footer.js') }}"></script>
-    <div id="footer">
-        <span>version alpha-1</span>
-        <span>copyright 2014 fifth column group</span>
+    <div class="container-fluid">
+        <hr/>
+        <div class="row">
+            <div class="col-xs-6 text-left">
+                <img src="{{ url_for('static', filename='img/image_placeholder.png') }}"
+                     width="64"
+                     height="64"
+                     alt="logo image goes here">
+            </div>
+            <div class="col-xs-6 text-right">
+                <p>Josh Madden</p>
+                <p>Team X</p>
+                <p>Franklin University</p>
+                <p>COMP461-V1WW-FA14</p>
+            </div>
+        </div>
     </div>
 {% endblock %}

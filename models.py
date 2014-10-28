@@ -1,4 +1,3 @@
-###############################################################################
 """
 @file models.py
 @brief data model objects definition
@@ -9,13 +8,40 @@
 ###############################################################################
 # IMPORTS
 ###############################################################################
-from app import db
+from sqlalchemy import BLOB
+from enterprise_app_project import db
 from sqlalchemy.dialects.postgresql import *
 
 
 ################################################################################
-# CLASSES
+# DEFINES
 ################################################################################
+class ShoppingCart(db.Model):
+    items = db.relationship('CartItem', lazy='dynamic')
+
+    def add_item(self, item):
+        pass
+
+    def remove_item(self, item):
+        pass
+
+
+class CartItem(db.Model):
+    product = db.relationship('Product', lazy='dynamic')
+    quantity = db.Column(INTEGER)
+
+
+class Customer(db.Model):
+    user_name = db.Column(TEXT)
+    pass_hash = db.Column(TEXT)
+    pass_salt = db.Column(TEXT)
+    billing_address = db.Column(TEXT)
+    shipping_address = db.Column(TEXT)
+    email_address = db.Column(TEXT)
+    person_name = db.Column(TEXT)
+    rating = db.Column(TEXT)
+
+
 class Voyage(db.Model):
     """
     Voyage DL object
@@ -25,6 +51,9 @@ class Voyage(db.Model):
     voyage_notes = db.Column(TEXT)
     waypoints = db.relationship('Waypoint', lazy='dynamic')
     ships = db.relationship('Ship', lazy='dynamic')
+
+
+
 
 
 class Ship(db.Model):
