@@ -30,16 +30,28 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <!-- main navbar links -->
                     <ul class="nav navbar-nav">
-                        {% if page == 'catalog' %}
-                            <li class="active">
-                                {% else %}
-                            <li>
-                        {% endif %}
-                        <a href=" {{ url_for('catalog_page_controller') }}">
-                            Catalog
-                        </a>
+                    {% if page == 'catalog' %}
+                        <li class="active">
+                    {% else %}
+                        <li>
+                    {% endif %}
+                            <a href=" {{ url_for('catalog_page_controller') }}">
+                                Catalog
+                            </a>
                         </li>
                     </ul>
+                    {% if page == 'catalog' %}
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" id="search" name="search"
+                                   class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" id="search-btn" class="btn
+                                btn-default">
+                            Submit
+                        </button>
+                    </form>
+                    {% endif %}
                     <!-- right side navbar links -->
                     <ul class="nav navbar-nav navbar-right">
                         {% if current_user.is_authenticated() %}

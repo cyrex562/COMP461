@@ -67,6 +67,7 @@ def get_template_values(page_name):
     }
     return template_values
 
+
 @app.route('/')
 def default_page_controller():
     """
@@ -90,6 +91,7 @@ def catalog_page_controller():
     if request.method == 'POST':
         pass
     return render_template('catalog.html', **template_values)
+
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required

@@ -45,8 +45,68 @@
    <rating>
     0
    </rating>
+   <orders>
+       <order id="0">
+           <order_item>
+               <product_id></product_id>
+               <quantity></quantity>
+               <subtotal_cost></subtotal_cost>
+           </order_item>
+           <order_shipping_cost></order_shipping_cost>
+           <order_tax_amount></order_tax_amount>
+           <order_total_cost></order_total_cost>
+       </order>
+   </orders>
   </customer>
  </customers>
  <products>
+     <product id="0">
+         <product_name>Text messaging app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="1">
+         <product_name>Multimedia player app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="2">
+         <product_name>Softphone app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="3">
+         <product_name>Mapping app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="4">
+         <product_name>Radio communications app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="5">
+         <product_name>File sharing app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="6">
+         <product_name>Video recording app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
+     <product id="7">
+         <product_name>Secure file storage app</product_name>
+         <download_link></download_link>
+         <platform>Android</platform>
+         <platform_requirements></platform_requirements>
+     </product>
  </products>
 </data>

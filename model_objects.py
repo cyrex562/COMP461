@@ -79,6 +79,19 @@ class User(UserMixin):
     def __repr__(self):
         return 'User, username: {0}, '
 
+
+class Product(object):
+    """
+    Product
+    """
+    def __init__(self):
+        self.id = 0
+        self.product_name = ""
+        self.download_link = ""
+        self.platform = ""
+        self.platform_requirements = {}
+
+
 # class AnonymousUser(AnonymousUserMixin):
 #     def is_admin(self):
 #         return False
