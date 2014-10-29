@@ -94,6 +94,7 @@ class App(object):
         self.app_description = ""
         self.license_count = ""
         self.app_image = ""
+        self.price = 0
 
 
 ###############################################################################

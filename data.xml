@@ -69,6 +69,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="1">
          <app_name>Multimedia player app</app_name>
@@ -79,6 +80,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="2">
          <app_name>Softphone app</app_name>
@@ -89,6 +91,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="3">
          <app_name>Mapping app</app_name>
@@ -99,6 +102,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="4">
          <app_name>Radio communications app</app_name>
@@ -109,6 +113,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="5">
          <app_name>File sharing app</app_name>
@@ -119,6 +124,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="6">
          <app_name>Video recording app</app_name>
@@ -129,6 +135,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
      <app id="7">
          <app_name>Secure file storage app</app_name>
@@ -139,6 +146,7 @@
          <platform>Android</platform>
          <platform_requirements>NOT SET</platform_requirements>
          <app_image>generic_app_icon.png</app_image>
+         <price>0.99</price>
      </app>
  </apps>
 </data>

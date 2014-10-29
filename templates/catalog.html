@@ -9,6 +9,7 @@
                 <thead>
                 <th><!--icon--></th>
                 <!--text-->
+                <th><!--price--></th>
                 <th><!--availability--></th>
                 <th><!--add to cart btn--></th>
                 </thead>
@@ -26,6 +27,9 @@
                     </td>
                     <td>
                         {{ a.app_name }}
+                    </td>
+                    <td>
+                        ${{ a.price }}
                     </td>
                     <td>
                         {{ a.license_count }} License(s) available

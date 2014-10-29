@@ -156,6 +156,7 @@ def app_data_loader(soup):
             app_to_add.license_count = int(get_xml_tag_string(
                 app_xml.license_count))
             app_to_add.app_image = get_xml_tag_string(app_xml.app_image)
+            app_to_add.price = float(get_xml_tag_string(app_xml.price))
             add_table_row('apps', app_to_add)
 
 
@@ -222,6 +223,9 @@ def app_data_storage_handler(soup):
         append_xml_tag(soup, new_app_tag, 'license_count',
                        str(a.license_count))
         append_xml_tag(soup, new_app_tag, 'app_image', a.app_image)
+        append_xml_tag(soup, new_app_tag, 'price', str(a.price))
+        soup.data.apps.append(new_app_tag)
+
 
 def add_user(new_user):
     add_table_row('users', new_user)
