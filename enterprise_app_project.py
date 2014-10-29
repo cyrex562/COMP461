@@ -30,10 +30,10 @@ from model_ops import get_user_by_id, user_data_loader, get_user_by_username, \
     app_data_storage_handler, get_all_apps, get_app_by_id, \
     get_apps_for_cart_items, update_item_subtotals, update_cart_total
 from controller_ops import register_user
-################################################################################
+# ###############################################################################
 # DEFINES
 ################################################################################
-
+import model_ops
 
 
 class RedisSession(CallbackDict, SessionMixin):
@@ -275,7 +275,7 @@ def add_to_cart():
         session['cart'] = Cart()
     cart_item = CartItem()
     cart_item.quantity = int(request.json['quantity'])
-    cart_item.app_id = request.json['app_id']
+    cart_item.app_id = int(request.json['app_id'])
     session['cart'].items.append(cart_item)
     session.modified = True
     total_cart_items = 0
@@ -283,6 +283,39 @@ def add_to_cart():
         total_cart_items += item.quantity
     return jsonpickle.encode(
         {'message': 'success', 'data': {'total_cart_items': total_cart_items}})
+
+
+@app.route('/change_cart_item_quantity', methods=['POST'])
+def change_cart_item_quantity():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    cart = model_ops.change_cart_item_quantity(cart,
+                                               int(request.json['app_id']), int(
+            request.json['new_quantity']))
+    cart = update_item_subtotals(cart)
+    cart = update_cart_total(cart)
+    session['cart'] = cart
+    session.modified = True
+    return jsonpickle.encode({'message': 'success', 'data': {'cart': cart,
+                                                             'app_id':
+                                                                 request.json[
+                                                                     'app_id']}})
+
+
+@app.route('/remove_item_from_cart', methods=['POST'])
+def remove_item_from_cart():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    cart = model_ops.remove_item_from_cart(cart, int(request.json['app_id']))
+    cart = update_item_subtotals(cart)
+    cart = update_cart_total(cart)
+    session['cart'] = cart
+    session.modified = True
+    return jsonpickle.encode({'message': 'success',
+                              'data': {'cart': cart,
+                                       'app_id': request.json['app_id']}})
 
 
 @app.route('/cart_items_count', methods=['POST'])

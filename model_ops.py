@@ -238,8 +238,14 @@ def add_item_to_cart(item, cart):
     return cart
 
 
-def remove_item_from_cart(item, cart):
-    cart.items.remove(item)
+def remove_item_from_cart(cart, app_id):
+    item_to_remove = None
+    for item in cart.items:
+        if int(item.app_id) == app_id:
+            item_to_remove = item
+            break
+    if item_to_remove is not None:
+        cart.items.remove(item_to_remove)
     return cart
 
 
@@ -262,6 +268,14 @@ def update_cart_total(cart):
     for item in cart.items:
         cart.total += item.subtotal
     cart.total = round(cart.total, 2)
+    return cart
+
+
+def change_cart_item_quantity(cart, app_id, new_quantity):
+    for item in cart.items:
+        if int(item.app_id) == app_id:
+            item.quantity = new_quantity
+            break
     return cart
 
 
