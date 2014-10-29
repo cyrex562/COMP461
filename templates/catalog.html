@@ -4,7 +4,7 @@
             src="{{ url_for('static', filename='js/catalog.js') }}">
     </script>
     <div id="catalog-view">
-        <form role="form" action="app_details" method="post">
+        <form role="form" action="catalog_action" method="post">
             <table class="table table-striped">
                 <thead>
                 <th><!--icon--></th>
@@ -17,9 +17,7 @@
                 {% for a in apps %}
                 <tr>
                     <td>
-                        <button type="submit" name="app_id" value="{{ a.id }}"
-                                class="btn
-                        btn-default">
+                        <button type="submit" class="btn btn-default">
                             <img src="
                         {{ url_for('static', filename='img/' + a.app_image) }}"
                                  class="img-rounded" width="48" height="48">
@@ -35,13 +33,20 @@
                         {{ a.license_count }} License(s) available
                     </td>
                     <td>
-                        <button class="add_to_cart_btn btn btn-primary" value="
-                        {{ a.id }}">Add To Cart</button>
+                        <label>
+                            Quantity:
+                            <input type="number" name="quantity" value="1">
+                        </label>
+                        <button class="add_to_cart_btn btn btn-primary" value="{{ a.id }}">
+                            Add To Cart
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <input type="hidden" id="catalog_form_action" name="form_action"
+            value="get_app_details">
         </form>
     </div>
 {% endblock %}

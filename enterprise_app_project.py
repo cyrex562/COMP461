@@ -8,14 +8,15 @@
 # IMPORTS
 ################################################################################
 import atexit
-from flask import Flask, url_for, redirect, request, render_template
+from flask import Flask, url_for, redirect, request, render_template, session
 from flask.ext.login import LoginManager, login_required, login_user, \
     logout_user, current_user
 import signal
+import jsonpickle
 from config import SECRET_KEY
 from data_gateway import load_data_handlers, table_names, store_data, \
     init_data_gateway, load_data, store_data_handlers
-from model_objects import Customer
+from model_objects import Customer, Cart, CartItem
 from model_ops import get_user_by_id, user_data_loader, get_user_by_username, \
     customer_data_loader, user_data_storage_handler, \
     customer_data_storage_handler, get_customer_by_username, app_data_loader, \
@@ -144,7 +145,7 @@ def checkout_page_controller():
         return render_template('checkout.html', **template_values)
 
 
-@app.route('/app_details', methods=['GET', 'POST'])
+@app.route('/catalog_action', methods=['GET', 'POST'])
 def item_details_page_controller():
     """
     item details view page controller
@@ -154,10 +155,23 @@ def item_details_page_controller():
     if request.method == 'GET':
         return render_template('app_details.html', **template_values)
     elif request.method == 'POST':
-        app_id = int(request.form['app_id'])
-        sel_app = get_app_by_id(app_id)
-        template_values['app'] = sel_app
-        return render_template('app_details.html', **template_values)
+        json = request.json()
+        if request.form['form_action'] == 'add_to_cart':
+            cart = session.get('cart', Cart())
+            cart_item = CartItem()
+            cart_item.quantity = int(request.form['quantity'])
+            cart_item.app_id = request.form['app_id']
+            cart.items.append(cart_item)
+            total_cart_items = 0
+            for item in cart.items:
+                total_cart_items += item.quantity
+            return jsonpickle.encode({'total_cart_items': total_cart_items})
+        elif request.form['form_action'] == 'get_app_detils':
+            app_id = int(request.form['app_id'])
+            sel_app = get_app_by_id(app_id)
+            template_values['app'] = sel_app
+            return render_template('app_details.html', **template_values)
+
 
 @app.route('/landing', methods=['GET'])
 def landing_page_controller():

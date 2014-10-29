@@ -14,7 +14,7 @@ from flask.ext.login import UserMixin, AnonymousUserMixin
 ################################################################################
 # DEFINES
 ################################################################################
-class ShoppingCart():
+class Cart():
     """
     Shopping Cart object
     """
@@ -36,7 +36,7 @@ class CartItem():
     """
 
     def __init__(self):
-        self.product = None
+        self.app_id = 0
         self.quantity = 0
 
 
