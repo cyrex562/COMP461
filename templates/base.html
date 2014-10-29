@@ -21,6 +21,10 @@
             src="{{ url_for('static', filename='js/common.js') }}"></script>
 </head>
 <body>
+<script type="text/javascript">
+    var $SCRIPT_ROOT = {{  request.script_root | tojson | safe }};
+    var $IMG_ROOT = "{{ url_for('static', filename='img/') }}";
+</script>
 {% include "header.html" %}
 {% block body %}{% endblock %}
 {% include "footer.html" %}

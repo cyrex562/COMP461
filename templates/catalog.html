@@ -1,52 +1,232 @@
 {% extends "base.html" %}
 {% block body %}
+    <!-- cart modal -->
+    <div class="modal fade" id="cart_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Shopping Cart</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <table class="table table-striped" id="cart_table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart_table_body">
+                                </tbody>
+                            </table>
+                            <div><span>total: </span><span
+                                    id="cart_total"></span></div>
+                        </div>
+                    </div><!--/.container fluid-->
+                </div><!--./modal body-->
+                <div class="modal-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="btn-group">
+                                <button id="check_out_btn" class="btn
+                                btn-primary">Check Out</button>
+                                <button id="continue_shopping_btn" class="btn
+                                btn-success">Continue Shopping</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--./modal-footer-->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal --><!--/checkout_modall-->
+    <!-- app details modal -->
+    <div class="modal fade" id="checkout_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">App Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            TODO: order details
+                        </div>
+                        <div class="row">
+                            TODO: shipping address
+                        </div>
+                        <div class="row">
+                            TODO: checkbox for same as shipping address
+                            TODO: billing address
+                        </div>
+                    </div><!--/.container fluid-->
+                </div><!--./modal body-->
+                <div class="modal-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="btn-group">
+                                <button id="cancel_order_btn" class="btn
+                                btn-warning">Cancel Order</button>
+                                <button id="place_order_btn" class="btn
+                                btn-primary">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--./modal-footer-->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal --><!--/checkout_modall-->
+    <!-- app details modal -->
+    <div class="modal fade" id="app_details_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">App Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <img id="app_img"
+                                     src=""
+                                     class="img-rounded"
+                                     width="64"
+                                     height="64">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>Name</span></div>
+                            <div class="col-xs-6"><span
+                                    id="app_name"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>Platform</span></div>
+                            <div class="col-xs-6"><span
+                                    id="app_platform"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <span>Platform Requirements</span></div>
+                            <div class="col-xs-6"><span
+                                    id="app_platform_requirements"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>Publisher</span></div>
+                            <div class="col-xs-6"><span
+                                    id="app_publisher"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>Description</span></div>
+                            <div class="col-xs-6"><span
+                                    id="app_description"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>License Count</span>
+                            </div>
+                            <div class="col-xs-6"><span
+                                    id="app_license_count"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2"><span>Price</span></div>
+                            <div class="col-xs-6">
+                                <span id="app_price"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <label>Qty</label>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="number" min="1"
+                                       class="form-control"
+                                       size="2" id="app_details_modal_quantity"
+                                       value="1">
+                                <input type="hidden" value=""
+                                       id="app_id">
+                            </div>
+                            <div class="col-xs-9">
+                                <div class="btn-group" role="group">
+                                    <button id="modal_add_to_cart_btn"
+                                            value="add_to_cart"
+                                            class="btn btn-primary">
+                                        Add To Cart
+                                    </button>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            id="modal_add_to_cart_and_checkout_btn">
+                                        Add To Cart and Checkout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal --><!--/.app details modal-->
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/catalog.js') }}">
     </script>
     <div id="catalog-view">
-        <form role="form" action="catalog_action" method="post">
-            <table class="table table-striped">
-                <thead>
-                <th><!--icon--></th>
-                <!--text-->
-                <th><!--price--></th>
-                <th><!--availability--></th>
-                <th><!--add to cart btn--></th>
-                </thead>
-                <tbody>
-                {% for a in apps %}
-                <tr>
+        {#        <form role="form" action="catalog_action" method="post">#}
+        <table class="table table-striped">
+            <thead>
+            <th><!--icon--></th>
+            <!--text-->
+            <th><!--price--></th>
+            <th><!--availability--></th>
+            <th><!--add to cart btn--></th>
+            </thead>
+            <tbody>
+            {% for a in apps %}
+                <tr id="app_row_{{ a.id }}">
                     <td>
-                        <button type="submit" class="btn btn-default">
+                        <button class="btn btn-default app_details_btn"
+                                value="{{ a.id }}"
+                                data-toggle="modal"
+                                data-target="#app_details_modal">
                             <img src="
                         {{ url_for('static', filename='img/' + a.app_image) }}"
-                                 class="img-rounded" width="48" height="48">
+                                 class="img-rounded"
+                                 width="48"
+                                 height="48">
                         </button>
                     </td>
-                    <td>
-                        {{ a.app_name }}
-                    </td>
-                    <td>
-                        ${{ a.price }}
-                    </td>
-                    <td>
-                        {{ a.license_count }} License(s) available
-                    </td>
+                    <td>{{ a.app_name }}</td>
+                    <td>${{ a.price }}</td>
+                    <td>{{ a.license_count }} License(s) available</td>
                     <td>
                         <label>
                             Quantity:
-                            <input type="number" name="quantity" value="1">
+                            <input type="number" class="form-control
+                            add_to_cart_quantity" value="1">
                         </label>
-                        <button class="add_to_cart_btn btn btn-primary" value="{{ a.id }}">
+                        <button class="add_to_cart_btn btn btn-primary"
+                                value="{{ a.id }}">
                             Add To Cart
                         </button>
                     </td>
                 </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <input type="hidden" id="catalog_form_action" name="form_action"
-            value="get_app_details">
-        </form>
+            {% endfor %}
+            </tbody>
+        </table>
+        {#        </form>#}
     </div>
 {% endblock %}

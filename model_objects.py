@@ -18,16 +18,9 @@ class Cart():
     """
     Shopping Cart object
     """
-
     def __init__(self):
         self.items = []
-
-    def add_item(self, item):
-        self.items.append(item)
-
-    def remove_item(self, item):
-        if item in self.items:
-            self.items.remove(item)
+        self.total = 0.0
 
 
 class CartItem():
@@ -37,7 +30,9 @@ class CartItem():
 
     def __init__(self):
         self.app_id = 0
+        self.app = None
         self.quantity = 0
+        self.subtotal = 0.0
 
 
 class Customer():

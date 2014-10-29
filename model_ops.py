@@ -1,4 +1,4 @@
-################################################################################
+# ###############################################################################
 # @file model_ops.py
 # @brief data model operations
 # @author Josh Madden
@@ -153,8 +153,7 @@ def app_data_loader(soup):
             app_to_add.app_publisher = get_xml_tag_string(app_xml.app_publisher)
             app_to_add.app_description = get_xml_tag_string(
                 app_xml.app_description)
-            app_to_add.license_count = int(get_xml_tag_string(
-                app_xml.license_count))
+            app_to_add.license_count = int(get_xml_tag_string(app_xml.license_count))
             app_to_add.app_image = get_xml_tag_string(app_xml.app_image)
             app_to_add.price = float(get_xml_tag_string(app_xml.price))
             add_table_row('apps', app_to_add)
@@ -171,10 +170,8 @@ def customer_data_loader(soup):
                 customer_xml.billing_address)
             customer_to_add.shipping_address = get_xml_tag_string(
                 customer_xml.shipping_address)
-            customer_to_add.email_address = \
-                get_xml_tag_string(customer_xml.email_address)
-            customer_to_add.person_name = \
-                get_xml_tag_string(customer_xml.person_name)
+            customer_to_add.email_address = get_xml_tag_string(customer_xml.email_address)
+            customer_to_add.person_name = get_xml_tag_string(customer_xml.person_name)
             customer_to_add.rating = get_xml_tag_string(customer_xml.rating)
             add_table_row('customers', customer_to_add)
 
@@ -220,8 +217,7 @@ def app_data_storage_handler(soup):
                        a.platform_requirements)
         append_xml_tag(soup, new_app_tag, 'app_publisher', a.app_publisher)
         append_xml_tag(soup, new_app_tag, 'app_description', a.app_description)
-        append_xml_tag(soup, new_app_tag, 'license_count',
-                       str(a.license_count))
+        append_xml_tag(soup, new_app_tag, 'license_count', str(a.license_count))
         append_xml_tag(soup, new_app_tag, 'app_image', a.app_image)
         append_xml_tag(soup, new_app_tag, 'price', str(a.price))
         soup.data.apps.append(new_app_tag)
@@ -235,6 +231,38 @@ def add_user(new_user):
 def add_customer(new_customer):
     add_table_row('customers', new_customer)
     store_data()
+
+
+def add_item_to_cart(item, cart):
+    cart.items.append(item)
+    return cart
+
+
+def remove_item_from_cart(item, cart):
+    cart.items.remove(item)
+    return cart
+
+
+def get_apps_for_cart_items(cart):
+    for item in cart.items:
+        if item.app is None:
+            app = get_app_by_id(int(item.app_id))
+            item.app = app
+    return cart
+
+
+def update_item_subtotals(cart):
+    for item in cart.items:
+        item.subtotal = round(item.app.price * item.quantity,2)
+    return cart
+
+
+def update_cart_total(cart):
+    cart.total = 0.0
+    for item in cart.items:
+        cart.total += item.subtotal
+    cart.total = round(cart.total, 2)
+    return cart
 
 
 ################################################################################

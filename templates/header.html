@@ -30,27 +30,28 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     <!-- main navbar links -->
                     <ul class="nav navbar-nav">
-                    {% if page == 'catalog' %}
-                        <li class="active">
-                    {% else %}
-                        <li>
-                    {% endif %}
-                            <a href=" {{ url_for('catalog_page_controller') }}">
-                                Catalog
-                            </a>
+                        {% if page == 'catalog' %}
+                            <li class="active">
+                                {% else %}
+                            <li>
+                        {% endif %}
+                        <a href=" {{ url_for('catalog_page_controller') }}">
+                            Catalog
+                        </a>
                         </li>
                     </ul>
                     {% if page == 'catalog' %}
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" id="search" name="search"
-                                   class="form-control" placeholder="Search">
-                        </div>
-                        <button type="submit" id="search-btn" class="btn
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" id="search" name="search"
+                                       class="form-control"
+                                       placeholder="Search">
+                            </div>
+                            <button type="submit" id="search-btn" class="btn
                                 btn-default">
-                            Submit
-                        </button>
-                    </form>
+                                Submit
+                            </button>
+                        </form>
                     {% endif %}
                     <!-- right side navbar links -->
                     <ul class="nav navbar-nav navbar-right">
@@ -60,10 +61,10 @@
                                     {% else %}
                                 <li>
                             {% endif %}
-                                <a href="{{ url_for('account_page_controller') }}">
-                                    Account
-                                </a>
-                            </li>
+                        <a href="{{ url_for('account_page_controller') }}">
+                            Account
+                        </a>
+                        </li>
                         {% endif %}
                         {% if not current_user.is_authenticated() %}
                             <li>
@@ -78,15 +79,25 @@
                                 </a>
                             </li>
                         {% endif %}
-                        <li>
-                            <a href="{{ url_for('cart_page_controller') }}">
-                                <span id="cart_badge" class="badge">0</span>
+                        {#                        <li>#}
+                        {#                            <a href="{{ url_for('cart_page_controller') }}">#}
+                        {#                                <span id="cart_badge" class="badge">0</span>#}
+                        {#                                <span class="glyphicon#}
+                        {#                                glyphicon-shopping-cart"></span>#}
+                        {#                                Cart#}
+                        {#                            </a>#}
+                        {#                           #}
+                        {#                        </li>#}
+                    </ul>
+                    <form class="navbar-form navbar-right">
+                        <button class="btn btn-default" id="cart_btn">
+                            <span id="cart_badge" class="badge">0</span>
                                 <span class="glyphicon
                                 glyphicon-shopping-cart"></span>
-                                Cart
-                            </a>
-                        </li>
-                    </ul>
+                            Cart
+                        </button>
+                    </form>
+
                 </div>
                 <!-- /.navbar-collapse -->
             </div>
