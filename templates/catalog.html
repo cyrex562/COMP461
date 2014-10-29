@@ -1,9 +1,43 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 {% block body %}
     <script type="text/javascript"
-            src="{{  url_for('static', filename='js/catalog.js') }}">
+            src="{{ url_for('static', filename='js/catalog.js') }}">
     </script>
     <div id="catalog-view">
-        <p>catalog</p>
+        <form role="form" action="app_details" method="post">
+            <table class="table table-striped">
+                <thead>
+                <th><!--icon--></th>
+                <!--text-->
+                <th><!--availability--></th>
+                <th><!--add to cart btn--></th>
+                </thead>
+                <tbody>
+                {% for a in apps %}
+                <tr>
+                    <td>
+                        <button type="submit" name="app_id" value="{{ a.id }}"
+                                class="btn
+                        btn-default">
+                            <img src="
+                        {{ url_for('static', filename='img/' + a.app_image) }}"
+                                 class="img-rounded" width="48" height="48">
+                        </button>
+                    </td>
+                    <td>
+                        {{ a.app_name }}
+                    </td>
+                    <td>
+                        {{ a.license_count }} License(s) available
+                    </td>
+                    <td>
+                        <button class="add_to_cart_btn btn btn-primary" value="
+                        {{ a.id }}">Add To Cart</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
     </div>
 {% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/app_details.js') }}">
+    </script>
+    <div id="item-details">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-4"><img src="
+                        {{ url_for('static', filename='img/' + app.app_image) }}"
+                                           class="img-rounded" width="64"
+                                           height="64"></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>Name</span></div>
+                <div class="col-xs-2">{{ app.app_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>Platform</span></div>
+                <div class="col-xs-2">{{ app.platform }}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>Platform Requirements</span></div>
+                <div class="col-xs-2">{{ app.platform_requirements }}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>Publisher</span></div>
+                <div class="col-xs-2">{{ app.app_publisher }}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>Description</span></div>
+                <div class="col-xs-2">{{ app.app_description }}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2"><span>License Count</span></div>
+                <div class="col-xs-2">{{ app.license_count }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

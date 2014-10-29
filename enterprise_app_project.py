@@ -18,7 +18,8 @@ from data_gateway import load_data_handlers, table_names, store_data, \
 from model_objects import Customer
 from model_ops import get_user_by_id, user_data_loader, get_user_by_username, \
     customer_data_loader, user_data_storage_handler, \
-    customer_data_storage_handler, get_customer_by_username
+    customer_data_storage_handler, get_customer_by_username, app_data_loader, \
+    app_data_storage_handler, get_all_apps, get_app_by_id
 
 ################################################################################
 # DEFINES
@@ -37,14 +38,17 @@ login_manager.init_app(app)
 # ** configure loaders for the data loader
 load_data_handlers.append(user_data_loader)
 load_data_handlers.append(customer_data_loader)
+load_data_handlers.append(app_data_loader)
 
 # ** configure table names
 table_names.append('users')
 table_names.append('customers')
+table_names.append('apps')
 
 # ** configure storage handlers
 store_data_handlers.append(user_data_storage_handler)
 store_data_handlers.append(customer_data_storage_handler)
+store_data_handlers.append(app_data_storage_handler)
 
 # ** run tdg initializer
 init_data_gateway()
@@ -84,6 +88,7 @@ def catalog_page_controller():
     :return:
     """
     template_values = get_template_values('catalog')
+    template_values['apps'] = get_all_apps()
     app.logger.debug('current_user, is_auth" {0}, is_anonymous: {1}'.format(
         current_user.is_authenticated(), current_user.is_anonymous()))
     if request.method == 'GET':
@@ -139,7 +144,7 @@ def checkout_page_controller():
         return render_template('checkout.html', **template_values)
 
 
-@app.route('/item_details', methods=['GET', 'POST'])
+@app.route('/app_details', methods=['GET', 'POST'])
 def item_details_page_controller():
     """
     item details view page controller
@@ -147,8 +152,12 @@ def item_details_page_controller():
     """
     template_values = get_template_values('item_details')
     if request.method == 'GET':
-        return render_template('item_details.html', **template_values)
-
+        return render_template('app_details.html', **template_values)
+    elif request.method == 'POST':
+        app_id = int(request.form['app_id'])
+        sel_app = get_app_by_id(app_id)
+        template_values['app'] = sel_app
+        return render_template('app_details.html', **template_values)
 
 @app.route('/landing', methods=['GET'])
 def landing_page_controller():

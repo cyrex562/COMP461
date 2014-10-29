@@ -48,65 +48,97 @@
    <orders>
        <order id="0">
            <order_item>
-               <product_id></product_id>
-               <quantity></quantity>
-               <subtotal_cost></subtotal_cost>
+               <app_id>0</app_id>
+               <quantity>1</quantity>
+               <subtotal_cost>0.99</subtotal_cost>
            </order_item>
-           <order_shipping_cost></order_shipping_cost>
-           <order_tax_amount></order_tax_amount>
-           <order_total_cost></order_total_cost>
+           <order_shipping_cost>1.99</order_shipping_cost>
+           <order_tax_amount>0.50</order_tax_amount>
+           <order_total_cost>3.49</order_total_cost>
        </order>
    </orders>
   </customer>
  </customers>
- <products>
-     <product id="0">
-         <product_name>Text messaging app</product_name>
-         <download_link></download_link>
+ <apps>
+     <app id="0">
+         <app_name>Text messaging app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="1">
-         <product_name>Multimedia player app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="1">
+         <app_name>Multimedia player app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="2">
-         <product_name>Softphone app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="2">
+         <app_name>Softphone app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="3">
-         <product_name>Mapping app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="3">
+         <app_name>Mapping app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="4">
-         <product_name>Radio communications app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="4">
+         <app_name>Radio communications app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="5">
-         <product_name>File sharing app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="5">
+         <app_name>File sharing app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="6">
-         <product_name>Video recording app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="6">
+         <app_name>Video recording app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
-     <product id="7">
-         <product_name>Secure file storage app</product_name>
-         <download_link></download_link>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+     <app id="7">
+         <app_name>Secure file storage app</app_name>
+         <download_link>NOT SET</download_link>
+         <app_publisher>NOT SET</app_publisher>
+         <app_description>NOT SET</app_description>
+         <license_count>20</license_count>
          <platform>Android</platform>
-         <platform_requirements></platform_requirements>
-     </product>
- </products>
+         <platform_requirements>NOT SET</platform_requirements>
+         <app_image>generic_app_icon.png</app_image>
+     </app>
+ </apps>
 </data>

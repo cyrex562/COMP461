@@ -80,30 +80,21 @@ class User(UserMixin):
         return 'User, username: {0}, '
 
 
-class Product(object):
+class App(object):
     """
     Product
     """
     def __init__(self):
         self.id = 0
-        self.product_name = ""
+        self.app_name = ""
         self.download_link = ""
         self.platform = ""
         self.platform_requirements = {}
+        self.app_publisher = ""
+        self.app_description = ""
+        self.license_count = ""
+        self.app_image = ""
 
-
-# class AnonymousUser(AnonymousUserMixin):
-#     def is_admin(self):
-#         return False
-#
-#     def is_eng_admin(self):
-#         return False
-#
-#     def is_user(self):
-#         return False
-#
-#     def is_authenticated(self):
-#         return False
 
 ###############################################################################
 # END OF FILE

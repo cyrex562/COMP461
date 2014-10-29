@@ -9,7 +9,7 @@
 ################################################################################
 from data_gateway import get_table, load_data_handlers, add_table_row, \
     store_data
-from model_objects import User, Customer
+from model_objects import User, Customer, App
 
 
 ################################################################################
@@ -23,6 +23,11 @@ def get_all_users():
 def get_all_customers():
     customer_table = get_table('customers')
     return customer_table
+
+
+def get_all_apps():
+    app_table = get_table('apps')
+    return app_table
 
 
 def get_user_by_id(in_id):
@@ -55,6 +60,16 @@ def get_customer_by_user_id(in_user_id):
             break
 
     return found_customer
+
+
+def get_app_by_id(in_app_id):
+    found_app = None
+    apps = get_all_apps()
+    for a in apps:
+        if a.id == in_app_id:
+            found_app = a
+            break
+    return found_app
 
 
 def get_next_user_id():
@@ -108,6 +123,10 @@ def get_customer_by_username(username):
     return found_customer
 
 
+def get_xml_tag_string(soup_ele):
+    return unicode(soup_ele.contents[0].string.strip())
+
+
 def user_data_loader(soup):
     users = soup.data.users
     for user_child_xml in users.children:
@@ -115,11 +134,29 @@ def user_data_loader(soup):
             user_to_add = User()
             user_to_add.id = user_child_xml['id']
             user_to_add.user_type = user_child_xml['user_type']
-            user_to_add.username = \
-                unicode(user_child_xml.username.contents[0].string.strip())
-            user_to_add.password = \
-                unicode(user_child_xml.password.contents[0].string.strip())
+            user_to_add.username = get_xml_tag_string(user_child_xml.username)
+            user_to_add.password = get_xml_tag_string(user_child_xml.password)
             add_table_row('users', user_to_add)
+
+
+def app_data_loader(soup):
+    apps_xml = soup.data.apps
+    for app_xml in apps_xml.children:
+        if app_xml.string != '\n':
+            app_to_add = App()
+            app_to_add.id = int(app_xml['id'])
+            app_to_add.app_name = get_xml_tag_string(app_xml.app_name)
+            app_to_add.download_link = get_xml_tag_string(app_xml.download_link)
+            app_to_add.platform = get_xml_tag_string(app_xml.platform)
+            app_to_add.platform_requirements = get_xml_tag_string(
+                app_xml.platform_requirements)
+            app_to_add.app_publisher = get_xml_tag_string(app_xml.app_publisher)
+            app_to_add.app_description = get_xml_tag_string(
+                app_xml.app_description)
+            app_to_add.license_count = int(get_xml_tag_string(
+                app_xml.license_count))
+            app_to_add.app_image = get_xml_tag_string(app_xml.app_image)
+            add_table_row('apps', app_to_add)
 
 
 def customer_data_loader(soup):
@@ -128,54 +165,63 @@ def customer_data_loader(soup):
         if customer_xml.string != '\n':
             customer_to_add = Customer()
             customer_to_add.id = customer_xml['id']
-            customer_to_add.user_id = unicode(customer_xml.user_id.contents[
-                                                  0].string.strip())
-            customer_to_add.billing_address = unicode(
-                customer_xml.billing_address.contents[
-                    0].string.strip())
-            customer_to_add.shipping_address = unicode(
-                customer_xml.shipping_address.contents[
-                    0].string.strip())
-            customer_to_add.email_address = unicode(
-                customer_xml.email_address.contents[
-                                                  0].string.strip())
-            customer_to_add.person_name = unicode(
-                customer_xml.person_name.contents[
-                                                  0].string.strip())
-            customer_to_add.rating = unicode(customer_xml.rating.contents[
-                                                  0].string.strip())
+            customer_to_add.user_id = get_xml_tag_string(customer_xml.user_id)
+            customer_to_add.billing_address = get_xml_tag_string(
+                customer_xml.billing_address)
+            customer_to_add.shipping_address = get_xml_tag_string(
+                customer_xml.shipping_address)
+            customer_to_add.email_address = \
+                get_xml_tag_string(customer_xml.email_address)
+            customer_to_add.person_name = \
+                get_xml_tag_string(customer_xml.person_name)
+            customer_to_add.rating = get_xml_tag_string(customer_xml.rating)
             add_table_row('customers', customer_to_add)
+
+
+def append_xml_tag(soup, tag_parent, tag_name, tag_val):
+    new_tag = soup.new_tag(tag_name)
+    new_tag.string = tag_val
+    tag_parent.append(new_tag)
 
 
 def user_data_storage_handler(soup):
     users = get_all_users()
     for u in users:
-        soup.data.users.append(soup.new_tag('user', id=u.id))
-        user_xml = soup.data.users.find_all(id=u.id)[0]
-        user_xml.append(soup.new_tag('username'))
-        user_xml.username.append(u.username)
-        user_xml.append(soup.new_tag('password'))
-        user_xml.password.append(u.password)
+        new_user_tag = soup.new_tag('user', id=u.id)
+        append_xml_tag(soup, new_user_tag, 'username', u.username)
+        append_xml_tag(soup, new_user_tag, 'password', u.password)
+        soup.data.users.append(new_user_tag)
 
 
 def customer_data_storage_handler(soup):
     customers = get_all_customers()
     for c in customers:
-        soup.data.customers.append(soup.new_tag('customer', id=c.id))
-        customer_xml = soup.data.customers.find_all(id=c.id)[0]
-        customer_xml.append(soup.new_tag('user_id'))
-        customer_xml.user_id.append(c.user_id)
-        customer_xml.append(soup.new_tag('billing_address'))
-        customer_xml.billing_address.append(c.billing_address)
-        customer_xml.append(soup.new_tag('shipping_address'))
-        customer_xml.shipping_address.append(c.shipping_address)
-        customer_xml.append(soup.new_tag('email_address'))
-        customer_xml.email_address.append(c.email_address)
-        customer_xml.append(soup.new_tag('person_name'))
-        customer_xml.person_name.append(c.person_name)
-        customer_xml.append(soup.new_tag('rating'))
-        customer_xml.rating.append(c.rating)
+        new_customer_tag = soup.new_tag('customer', id=c.id)
+        append_xml_tag(soup, new_customer_tag, 'user_id', c.user_id)
+        append_xml_tag(soup, new_customer_tag, 'billing_address',
+                       c.billing_address)
+        append_xml_tag(soup, new_customer_tag, 'shipping_address',
+                       c.shipping_address)
+        append_xml_tag(soup, new_customer_tag, 'email_address', c.email_address)
+        append_xml_tag(soup, new_customer_tag, 'person_name', c.person_name)
+        append_xml_tag(soup, new_customer_tag, 'rating', c.rating)
+        soup.data.customers.append(new_customer_tag)
 
+
+def app_data_storage_handler(soup):
+    apps = get_all_apps()
+    for a in apps:
+        new_app_tag = soup.new_tag('app', id=a.id)
+        append_xml_tag(soup, new_app_tag, 'app_name', a.app_name)
+        append_xml_tag(soup, new_app_tag, 'download_link', a.download_link)
+        append_xml_tag(soup, new_app_tag, 'platform', a.platform)
+        append_xml_tag(soup, new_app_tag, 'platform_requirements',
+                       a.platform_requirements)
+        append_xml_tag(soup, new_app_tag, 'app_publisher', a.app_publisher)
+        append_xml_tag(soup, new_app_tag, 'app_description', a.app_description)
+        append_xml_tag(soup, new_app_tag, 'license_count',
+                       str(a.license_count))
+        append_xml_tag(soup, new_app_tag, 'app_image', a.app_image)
 
 def add_user(new_user):
     add_table_row('users', new_user)
