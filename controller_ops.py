@@ -1,6 +1,7 @@
 from model_objects import User, Customer
 from model_ops import get_next_user_id, add_user, add_customer, \
     get_next_customer_id
+from model_xml import store_data
 
 
 def register_user(request):
@@ -20,7 +21,7 @@ def register_user(request):
     new_customer.shipping_address = request.form['shipping_address']
     new_customer.person_name = request.form['person_name']
     add_customer(new_customer)
-
+    store_data()
     return success
 
 

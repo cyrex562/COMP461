@@ -111,15 +111,15 @@ def order_data_loader(soup):
             order_to_add = Order()
             order_to_add.id = order_xml['id']
             order_to_add.handling_fee = float(get_xml_tag_string(
-                order_xml.handling_fee))
+                order_xml.order_handling_fee))
             order_to_add.tax_amount = float(get_xml_tag_string(
-                order_xml.tax_amount))
+                order_xml.order_tax_amount))
             order_to_add.total_cost = float(get_xml_tag_string(
-                order_xml.total_cost))
+                order_xml.order_total_cost))
             order_to_add.subtotal = float(get_xml_tag_string(
-                order_xml.subtotal))
+                order_xml.order_subtotal))
             order_to_add.customer_id = int(get_xml_tag_string(
-                order_xml.customer_id))
+                order_xml.order_customer_id))
             for item_xml in order_xml.items.children:
                 if item_xml.string != '\n':
                     item_to_add = CartItem()
@@ -128,7 +128,7 @@ def order_data_loader(soup):
                     item_to_add.quantity = int(get_xml_tag_string(
                         item_xml.quantity
                     ))
-                    item_to_add.subtotal = int(get_xml_tag_string(
+                    item_to_add.subtotal = float(get_xml_tag_string(
                         item_xml.subtotal))
                     order_to_add.items.append(item_to_add)
             add_table_row('orders', order_to_add)

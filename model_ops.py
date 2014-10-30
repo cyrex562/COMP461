@@ -3,17 +3,10 @@
 @brief data model operations, rules, and logic
 @author Josh Madden <cyrex562@gmail.com>
 """
-################################################################################
-# IMPORTS
-################################################################################
-from data_gateway import get_table, add_table_row, \
-    store_data
+from data_gateway import get_table, add_table_row
 from model_objects import User
 
 
-################################################################################
-# FUNCTIONS
-################################################################################
 def get_all_users():
     user_table = get_table('users')
     return user_table
@@ -129,12 +122,10 @@ def get_customer_by_username(username):
 
 def add_user(new_user):
     add_table_row('users', new_user)
-    store_data()
 
 
 def add_customer(new_customer):
     add_table_row('customers', new_customer)
-    store_data()
 
 
 def add_item_to_cart(item, cart):

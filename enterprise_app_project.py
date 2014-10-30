@@ -273,9 +273,10 @@ def change_cart_item_quantity():
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
-    cart = model_ops.change_cart_item_quantity(cart,
-                                               int(request.json['app_id']), int(
-            request.json['new_quantity']))
+    cart = \
+        model_ops.change_cart_item_quantity(cart,
+                                            int(request.json['app_id']),
+                                            int(request.json['new_quantity']))
     cart = update_item_subtotals(cart)
     cart = update_cart_total(cart)
     session['cart'] = cart
@@ -283,6 +284,33 @@ def change_cart_item_quantity():
     response = {'message': 'success',
                 'data': {'cart': cart, 'app_id': request.json['app_id']}}
     return jsonpickle.encode(response)
+
+
+@app.route('/change_checkout_item_quantity', methods=['POST'])
+def change_order_item_quantity():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    cart = \
+        model_ops.change_cart_item_quantity(cart,
+                                            int(request.json['app_id']),
+                                            int(request.json['new_quantity']))
+    cart = update_item_subtotals(cart)
+    cart = update_cart_total(cart)
+    session.modified = True
+    customer = get_customer_by_username(current_user.username)
+    handling_fee = model_ops.get_handling_fee(cart)
+    tax = model_ops.calc_order_tax(cart, handling_fee)
+    order_total = model_ops.calc_order_total(cart, tax, handling_fee)
+    result = {'message': 'success',
+              'data': {
+                  'customer': customer,
+                  'cart': cart,
+                  'handling_fee': handling_fee,
+                  'order_total': order_total,
+                  'tax': tax,
+                  'app_id': request.json['app_id']}}
+    return jsonpickle.encode(result, unpicklable=False)
 
 
 @app.route('/remove_item_from_cart', methods=['POST'])
@@ -295,10 +323,36 @@ def remove_item_from_cart():
     cart = update_cart_total(cart)
     session['cart'] = cart
     session.modified = True
-    return jsonpickle.encode({'message': 'success', 'data': {'cart': cart,
-                                                             'app_id':
-                                                                 request.json[
-                                                                     'app_id']}})
+    result = {'message': 'success',
+              'data': {
+                  'cart': cart,
+                  'app_id': request.json['app_id']}}
+    return jsonpickle.encode(result)
+
+
+@app.route('/remove_item_from_checkout', methods=['POST'])
+def remove_item_from_checkout():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    cart = model_ops.remove_item_from_cart(cart, int(request.json['app_id']))
+    cart = update_item_subtotals(cart)
+    cart = update_cart_total(cart)
+    session['cart'] = cart
+    session.modified = True
+    customer = get_customer_by_username(current_user.username)
+    handling_fee = model_ops.get_handling_fee(cart)
+    tax = model_ops.calc_order_tax(cart, handling_fee)
+    order_total = model_ops.calc_order_total(cart, tax, handling_fee)
+    result = {'message': 'success',
+              'data': {
+                  'customer': customer,
+                  'cart': cart,
+                  'handling_fee': handling_fee,
+                  'order_total': order_total,
+                  'tax': tax,
+                  'app_id': request.json['app_id']}}
+    return jsonpickle.encode(result, unpicklable=False)
 
 
 @app.route('/cart_items_count', methods=['POST'])
