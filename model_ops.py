@@ -173,7 +173,7 @@ def get_apps_for_cart_items(cart):
 
 def update_item_subtotals(cart):
     for item in cart.items:
-        item.subtotal = round(item.app.price * item.quantity,2)
+        item.subtotal = round(item.app.price * item.quantity, 2)
     return cart
 
 
@@ -210,9 +210,10 @@ def check_stock(cart):
     for item in cart.items:
         inventory_item = get_app_by_id(item.app_id)
         if item.quantity > inventory_item.license_count:
-            result.append({'app_id': item.app_id, 'name':
-                inventory_item.app_name, 'requested': item.quantity,
-                'available': inventory_item.license_count})
+            result.append({'app_id': item.app_id,
+                           'name': inventory_item.app_name,
+                           'requested': item.quantity,
+                           'available': inventory_item.license_count})
     return result
 
 
@@ -233,14 +234,13 @@ def place_order(customer, cart, handling_fee, tax, order_total,
 
 def update_app_license_count(app, new_license_count):
     apps = get_all_apps()
-    for i in range(0, len(apps)-1):
+    for i in range(0, len(apps) - 1):
         if str(apps[i].id) == str(app.id):
             apps[i].license_count = new_license_count
     set_table('apps', apps)
 
 
 def register_user(request):
-    # TODO validate
     success = True
     new_user = User()
     new_user.id = unicode(get_next_user_id())
@@ -266,3 +266,12 @@ def adjust_inventory(cart):
         new_license_count = app.license_count - item.quantity
         update_app_license_count(app, new_license_count)
     store_data()
+
+
+def get_orders_by_customer_id(customer_id):
+    result = []
+    orders = get_all_orders()
+    for order in orders:
+        if str(order.customer_id) == str(customer_id):
+            result.append(order)
+    return result

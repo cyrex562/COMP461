@@ -54,16 +54,18 @@ class RedisSessionInterface(SessionInterface):
         self.redis = redis
         self.prefix = prefix
 
-    def generate_sid(self):
+    @staticmethod
+    def generate_sid():
         return str(uuid4())
 
-    def get_redis_expiration_time(self, app, session):
-        if session.permanent:
-            return app.permanent_session_lifetime
+    @staticmethod
+    def get_redis_expiration_time(in_app, in_session):
+        if in_session.permanent:
+            return in_app.permanent_session_lifetime
         return timedelta(days=1)
 
-    def open_session(self, app, request):
-        sid = request.cookies.get(app.session_cookie_name)
+    def open_session(self, in_app, in_request):
+        sid = in_request.cookies.get(in_app.session_cookie_name)
         if not sid:
             sid = self.generate_sid()
             return self.session_class(sid=sid, new=True)
@@ -73,19 +75,19 @@ class RedisSessionInterface(SessionInterface):
             return self.session_class(data, sid=sid)
         return self.session_class(sid=sid, new=True)
 
-    def save_session(self, app, session, response):
-        domain = self.get_cookie_domain(app)
-        if not session:
-            self.redis.delete(self.prefix + session.sid)
-            if session.modified:
-                response.delete_cookie(app.session_cookie_name, domain=domain)
+    def save_session(self, in_app, in_session, response):
+        domain = self.get_cookie_domain(in_app)
+        if not in_session:
+            self.redis.delete(self.prefix + in_session.sid)
+            if in_session.modified:
+                response.delete_cookie(in_app.session_cookie_name, domain=domain)
             return
-        redis_exp = self.get_redis_expiration_time(app, session)
-        cookie_exp = self.get_expiration_time(app, session)
-        val = self.serializer.dumps(dict(session))
-        self.redis.setex(self.prefix + session.sid, val,
+        redis_exp = self.get_redis_expiration_time(in_app, in_session)
+        cookie_exp = self.get_expiration_time(in_app, in_session)
+        val = self.serializer.dumps(dict(in_session))
+        self.redis.setex(self.prefix + in_session.sid, val,
                          int(redis_exp.total_seconds()))
-        response.set_cookie(app.session_cookie_name, session.sid,
+        response.set_cookie(in_app.session_cookie_name, in_session.sid,
                             expires=cookie_exp, httponly=True, domain=domain)
 
 # * app initialization
@@ -158,7 +160,7 @@ def catalog_page_controller():
     return render_template('catalog.html', **template_values)
 
 
-@app.route('/account', methods=['GET', 'POST'])
+@app.route('/account', methods=['GET'])
 @login_required
 def account_page_controller():
     """
@@ -176,9 +178,9 @@ def account_page_controller():
     template_values['email'] = customer.email_address
     template_values['rating'] = customer.rating
     template_values['username'] = current_user.username
+    template_values['orders'] = model_ops.get_orders_by_customer_id(customer.id)
 
-    if request.method == 'GET':
-        return render_template('account.html', **template_values)
+    return render_template('account.html', **template_values)
 
 
 @app.route('/app', methods=['POST'])
@@ -383,7 +385,7 @@ def place_order():
                     order_total, shipping_address, billing_address)
         adjust_inventory(cart)
         result = {'message': 'success', 'data': {'order': order, 'customer':
-            customer, 'cart': cart }}
+            customer, 'cart': cart}}
         cart = model_ops.clear_cart(cart)
         session['cart'] = cart
         session.modified = True
@@ -488,6 +490,8 @@ def exit_handler():
 
 
 def sigterm_handler(signum, frame):
+    del signum
+    del frame
     model_xml.store_data()
 
 
