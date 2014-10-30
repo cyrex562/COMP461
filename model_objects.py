@@ -58,12 +58,21 @@ class User(UserMixin):
         self.user_type = 'user'
 
     def is_active(self):
+        """
+        return if its active
+        """
         return True
 
     def get_id(self):
+        """
+        Get the account ID
+        """
         return unicode(self.id)
 
     def is_authenticated(self):
+        """
+        Return if authenticated
+        """
         return True
 
     def __repr__(self):

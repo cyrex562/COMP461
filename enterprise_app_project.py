@@ -220,7 +220,7 @@ def account_page_controller():
 @app.route('/app', methods=['POST'])
 def get_app_details():
     """
-
+    Get an App
     :return:
     """
     app_id = int(request.json['app_id'])
@@ -232,7 +232,7 @@ def get_app_details():
 @app.route('/landing', methods=['GET'])
 def landing_page_controller():
     """
-    landing view page controller
+    Landing view page controller
     :return:
     """
     template_values = get_template_values('landing')
@@ -241,6 +241,10 @@ def landing_page_controller():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
+    """
+    Add an item to the cart
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart_item = CartItem()
@@ -257,6 +261,10 @@ def add_to_cart():
 
 @app.route('/change_cart_item_quantity', methods=['POST'])
 def change_cart_item_quantity():
+    """
+    Change the cart item quantity
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -276,6 +284,10 @@ def change_cart_item_quantity():
 @app.route('/change_checkout_item_quantity', methods=['POST'])
 @login_required
 def change_order_item_quantity():
+    """
+    Change checkout cart item quantity
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -303,6 +315,10 @@ def change_order_item_quantity():
 
 @app.route('/remove_item_from_cart', methods=['POST'])
 def remove_item_from_cart():
+    """
+    Remove an item from the cart
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -320,6 +336,10 @@ def remove_item_from_cart():
 
 @app.route('/clear_cart', methods=['POST'])
 def clear_cart():
+    """
+    Clear the cart
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -335,6 +355,10 @@ def clear_cart():
 @app.route('/remove_item_from_checkout', methods=['POST'])
 @login_required
 def remove_item_from_checkout():
+    """
+    Remove item from checkout
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -360,6 +384,10 @@ def remove_item_from_checkout():
 
 @app.route('/cart_items_count', methods=['POST'])
 def get_cart_items_count():
+    """
+    Get a count of the items in the cart
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     total_cart_items = 0
@@ -371,6 +399,10 @@ def get_cart_items_count():
 
 @app.route('/cart', methods=['POST'])
 def get_cart():
+    """
+    Get the cart
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -384,6 +416,10 @@ def get_cart():
 @app.route('/get_checkout_data', methods=['POST'])
 @login_required
 def get_checkout_data():
+    """
+    Get checkout data
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -401,6 +437,10 @@ def get_checkout_data():
 @app.route('/place_order', methods=['POST'])
 @login_required
 def place_order():
+    """
+    Place an order
+    :return:
+    """
     if 'cart' not in session:
         session['cart'] = Cart()
     cart = session['cart']
@@ -520,6 +560,10 @@ def logout_page_controller():
 
 @app.route('/user_logged_in', methods=['POST'])
 def user_logged_in():
+    """
+    Check if the user is logged in
+    :return:
+    """
     is_user_logged_in = 0
     if current_user.is_authenticated():
         is_user_logged_in = 1
@@ -538,12 +582,21 @@ def exit_handler():
 
 
 def sigterm_handler(signum, frame):
+    """
+    Registered sigterm handler. Store data on exit
+    :param signum:
+    :param frame:
+    :return:
+    """
     del signum
     del frame
     model_xml.store_data()
 
 
 if __name__ == '__main__':
+    """
+    Entry point
+    """
     atexit.register(exit_handler)
     signal.signal(signal.SIGTERM, sigterm_handler)
     signal.signal(signal.SIGINT, sigterm_handler)

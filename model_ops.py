@@ -388,6 +388,11 @@ def place_order(customer, cart, handling_fee, tax, order_total,
 
 
 def update_customer_rating(customer):
+    """
+    Update the customer rating
+    :param customer:
+    :return:
+    """
     customers = get_all_customers()
     new_rating = 'regular'
     customer_orders = get_orders_by_customer_id(customer.id)
@@ -482,6 +487,11 @@ def get_order_by_id(order_id):
 
 
 def get_apps_for_order(order):
+    """
+    Get apps for the order
+    :param order:
+    :return:
+    """
     for item in order.items:
         if item.app is None:
             item.app = get_app_by_id(item.app_id)

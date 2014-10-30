@@ -1,7 +1,13 @@
 /**
- * Created by root on 10/28/14.
+ * @file account.js
+ * @brief Account-related script
+ * @author Josh Madden <cyrex562@gmail.com>
  */
 
+/**
+ * Render the order
+ * @param result
+ */
 function show_order_cb(result) {
     if (result.message === 'success') {
         $('#order_details_customer_name').text(result.data.customer.person_name);
@@ -26,6 +32,9 @@ function show_order_cb(result) {
     }
 }
 
+/**
+ * Show the order
+ */
 function show_order() {
     var in_data = {
       order_id: $(this).attr('id')
@@ -33,6 +42,9 @@ function show_order() {
     post_request('get_order', show_order_cb, in_data);
 }
 
+/**
+ * Document Ready
+ */
 $(document).ready(function() {
    $('.order_row').click(show_order);
 });

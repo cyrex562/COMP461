@@ -1,10 +1,16 @@
-/* global $SCRIPT_ROOT */
+/**
+ * @file catalog.js
+ * @author Josh Madden <cyrex562@gmail.com>
+ * @brief methods to support the catalog page
+ */
 
 /**
- *
- * @param response
+ * If the user is logged in, then enable the 'add to cart and checkout' button.
+ * @param response the response received from the server:
+ *  result = {'message': 'success',
+              'data': {'user_logged_in': is_user_logged_in}}
  */
-function app_details_get_user_logged_in_cb(response) {
+function get_user_logged_in_cb(response) {
     /** @namespace response.data.user_logged_in */
     if (!response.data.user_logged_in) {
         console.log('disabling cart + checkout btn');
@@ -15,9 +21,10 @@ function app_details_get_user_logged_in_cb(response) {
     }
 }
 
+//noinspection JSValidateJSDoc
 /**
- *
- * @param result
+ * Fill in the app details modal
+ * @param result: {'message': 'success', 'data': {'app': sel_app}}
  */
 function show_app_details_cb(result) {
     console.log('showing the app details modal');
@@ -43,11 +50,11 @@ function show_app_details_cb(result) {
     $('#app_license_count').text(app.license_count);
     /** @namespace app.price */
     $('#app_price').text('$' + app.price);
-    post_request('user_logged_in', app_details_get_user_logged_in_cb, {});
+    post_request('user_logged_in', get_user_logged_in_cb, {});
 }
 
 /**
- *
+ * Send a request to the server to get the app details for the selected app.
  * @param event
  */
 function show_app_details(event) {
@@ -58,8 +65,9 @@ function show_app_details(event) {
 }
 
 /**
- *
+ * Update the count in the cart badge.
  * @param result
+ *  {'message': 'success', 'data': {'total_cart_items': total_cart_items}}
  */
 function add_to_cart_cb(result) {
     if (result.message === 'success') {
@@ -71,7 +79,7 @@ function add_to_cart_cb(result) {
 }
 
 /**
- *
+ * Add an item to the cart.
  */
 function add_to_cart() {
     var app_id = $(this).val();
@@ -84,8 +92,9 @@ function add_to_cart() {
 }
 
 /**
- *
+ * Hide the app details modal
  * @param result
+ * "{'message': 'success', 'data': {'total_cart_items': total_cart_items}}"
  */
 function modal_add_to_cart_cb(result) {
     console.log('hiding the app_details modal');
@@ -94,7 +103,7 @@ function modal_add_to_cart_cb(result) {
 }
 
 /**
- *
+ * Add an item to the cart from the app details modal.
  */
 function modal_add_to_cart() {
     var in_data = { app_id: $('#app_id').val(),
@@ -103,7 +112,8 @@ function modal_add_to_cart() {
 }
 
 /**
- *
+ * Hide the app details modal, add the item to the cart, and show the checkout
+ * modal
  * @param result
  */
 function modal_add_to_cart_and_checkout_cb(result) {
@@ -114,7 +124,7 @@ function modal_add_to_cart_and_checkout_cb(result) {
 }
 
 /**
- *
+ * Add an item to the cart and checkout.
  */
 function modal_add_to_cart_and_checkout() {
     var in_data = { app_id: $('#app_id').val(),
@@ -123,11 +133,11 @@ function modal_add_to_cart_and_checkout() {
 }
 
 /**
- *
+ * Generate a table row for the cart and order modals
  * @param cart_item
  * @returns {string}
  */
-function gen_cart_row(cart_item) {
+function gen_item_row(cart_item) {
     /** @namespace cart_item.subtotal */
     return '' +
         '<tr id="' + cart_item.app.id + '">' +
@@ -144,7 +154,9 @@ function gen_cart_row(cart_item) {
 
 /**
  * Refresh the cart table and re-bind events.
- * @param result data returned by the server.
+ * @param result :
+ *  {'message': 'success', 'data': { 'cart': cart,
+ *          'app_id': request.json['app_id']}}
  */
 function remove_item_from_checkout_cb(result) {
     if (result.message === 'success') {
@@ -156,7 +168,7 @@ function remove_item_from_checkout_cb(result) {
         /** @namespace cart.items */
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            order_table.append(gen_cart_row(cart_item));
+            order_table.append(gen_item_row(cart_item));
         }
 
         $('.app_quantity').bind('keyup change click', function () {
@@ -185,7 +197,7 @@ function remove_item_from_checkout_cb(result) {
 }
 
 /**
- *
+ * Remove an item from the checkout items list and cart
  * @param app_id
  */
 function remove_item_from_checkout(app_id) {
@@ -194,8 +206,16 @@ function remove_item_from_checkout(app_id) {
 }
 
 /**
- *
+ * Re-render the checkout items table.
  * @param result
+ * {'message': 'success',
+              'data': {
+                  'customer': customer,
+                  'cart': cart,
+                  'handling_fee': handling_fee,
+                  'order_total': order_total,
+                  'tax': tax,
+                  'app_id': request.json['app_id']}}
  */
 function change_checkout_item_quantity_cb(result) {
     if (result.message === 'success') {
@@ -216,9 +236,8 @@ function change_checkout_item_quantity_cb(result) {
 }
 
 
-
 /**
- *
+ * Change the quantity of items in the checkout queue
  * @param app_id
  * @param new_quantity
  */
@@ -233,7 +252,7 @@ function change_checkout_item_quantity(app_id, new_quantity) {
 }
 
 /**
- *
+ * Show the checkout modal
  * @param result a JSON object {
  *  'message' : TEXT,
  *  'data' : {
@@ -263,7 +282,7 @@ function show_check_out_cb(result) {
         var cart = result.data.cart;
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            var cart_row = gen_cart_row(cart_item);
+            var cart_row = gen_item_row(cart_item);
             order_table.append(cart_row);
         }
 
@@ -286,7 +305,7 @@ function show_check_out_cb(result) {
  }
 
 /**
- *
+ * Start the checkout process.
  */
 function show_check_out() {
     $('#cart_modal').modal('hide');
@@ -294,7 +313,7 @@ function show_check_out() {
 }
 
 /**
- *
+ * Re-render the cart table.
  * @param result
  */
 function change_cart_item_quantity_cb(result) {
@@ -312,7 +331,7 @@ function change_cart_item_quantity_cb(result) {
 }
 
 /**
- *
+ * Change the quantity of an item in the cart
  * @param app_id
  * @param new_quantity
  */
@@ -326,7 +345,7 @@ function change_cart_item_quantity(app_id, new_quantity) {
 }
 
 /**
- *
+ * If a user is logged in, then enable the checkout button on the cart modal.
  * @param response JSON {
  *  'message': TEXT,
  *  'data': {
@@ -342,7 +361,7 @@ function cart_user_logged_in_cb(response) {
 }
 
 /**
- *
+ * Render the cart.
  * @param result
  */
 function get_cart_cb(result) {
@@ -352,7 +371,7 @@ function get_cart_cb(result) {
         var cart = result.data.cart;
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            cart_table.append(gen_cart_row(cart_item));
+            cart_table.append(gen_item_row(cart_item));
         }
 
         $('.app_quantity').bind('keyup change click', function () {
@@ -379,7 +398,7 @@ function get_cart_cb(result) {
 }
 
 /**
- *
+ * Get the cart.
  * @param event
  */
 function get_cart(event) {
@@ -388,7 +407,7 @@ function get_cart(event) {
 }
 
 /**
- *
+ * Update the cart badge with the number of items in the cart.
  * @param result
  */
 function update_cart_items_count_cb(result) {
@@ -398,7 +417,7 @@ function update_cart_items_count_cb(result) {
 }
 
 /**
- *
+ * Request the number of items in the cart.
  */
 function update_cart_items_count() {
     post_request('cart_items_count', update_cart_items_count_cb, {});
@@ -415,7 +434,7 @@ function remove_item_from_cart_cb(result) {
         var cart = result.data.cart;
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            cart_table.append(gen_cart_row(cart_item));
+            cart_table.append(gen_item_row(cart_item));
         }
         $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
@@ -436,7 +455,7 @@ function remove_item_from_cart_cb(result) {
 }
 
 /**
- *
+ * Remove an item from the cart
  * @param app_id
  */
 function remove_item_from_cart(app_id) {
@@ -444,7 +463,7 @@ function remove_item_from_cart(app_id) {
 }
 
 /**
- *
+ * Clear the shopping cart.
  * @param result
  */
 function clear_shopping_cart_cb(result) {
@@ -454,7 +473,7 @@ function clear_shopping_cart_cb(result) {
         var cart = result.data.cart;
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            cart_table_body.append(gen_cart_row(cart_item));
+            cart_table_body.append(gen_item_row(cart_item));
         }
         $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
@@ -475,14 +494,14 @@ function clear_shopping_cart_cb(result) {
 }
 
 /**
- *
+ * Clear the shopping cart
  */
 function clear_shopping_cart() {
     post_request('clear_cart', clear_shopping_cart_cb, {});
 }
 
 /**
- *
+ * Checkbox state change handler for the 'same address' checkbox
  */
 function same_address_cbx_change() {
     if ($(this).is(':checked')) {
@@ -492,16 +511,15 @@ function same_address_cbx_change() {
     }
 }
 
-
-
 /**
- *
+ * Render the order details modal
  * @param result
+ * result = {'message': 'success', 'data': {'order': order,
+                 'customer': customer}}
  */
 function place_order_cb(result) {
     if (result.message === 'success') {
         $('#checkout_modal').modal('hide');
-
         $('#order_details_customer_name').text(result.data.customer.person_name);
         $('#order_details_customer_email').text(result.data.customer.email_address);
         $('#order_details_billing_address').text(result.data.order.billing_address);
@@ -552,7 +570,7 @@ function place_order_cb(result) {
 }
 
 /**
- *
+ * Place an order
  */
 function place_order() {
     var in_data = {
@@ -572,7 +590,9 @@ function place_order() {
     post_request('place_order', place_order_cb, in_data);
 }
 
-
+/**
+ * Document ready function
+ */
 $(document).ready(function () {
     $('.add_to_cart_btn').click(add_to_cart);
     $('.app_details_btn').click(show_app_details);

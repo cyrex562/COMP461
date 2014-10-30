@@ -12,6 +12,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="order_customer_id">
+
                     <h3>Items Ordered:</h3>
                     <table class="table table-striped" id="order_details_table">
                         <tr>
@@ -432,20 +433,22 @@
                     </td>
                     <td>{{ a.app_name }}</td>
                     <td>${{ a.price }}</td>
-                    {%  if a.license_count == 0 %}
+                    {% if a.license_count == 0 %}
                         <td class="danger">{{ a.license_count }} License(s)
-                            available</td>
-                    {%  elif a.license_count < 5 %}
+                            available
+                        </td>
+                    {% elif a.license_count < 5 %}
                         <td class="warning">{{ a.license_count }} License(s)
-                            available</td>
-                    {%  else %}
+                            available
+                        </td>
+                    {% else %}
                         <td>{{ a.license_count }} License(s) available</td>
                     {% endif %}
 
                     <td>
                         <label>
                             Quantity:
-                            <input type="number" class="form-control
+                            <input type="number" min="0" class="form-control
                             add_to_cart_quantity" value="1">
                         </label>
                         <button class="add_to_cart_btn btn btn-primary"

@@ -17,6 +17,21 @@
     <script type=text/javascript
             src="
                 {{ url_for('static', filename='js/common.js') }}"></script>
+    <script type=text/javascript
+            src="
+                {{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <script type=text/javascript
+            src="
+                {{ url_for('static', filename='js/IE7.js') }}"></script>
+    <script type=text/javascript
+            src="
+                {{ url_for('static', filename='js/ie7-squish.js') }}"></script>
+    <script type=text/javascript
+            src="
+                {{ url_for('static', filename='js/IE8.js') }}"></script>
+    <script type=text/javascript
+            src="
+                {{ url_for('static', filename='js/IE9.js') }}"></script>
     <script type=text/javascript>
         var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>

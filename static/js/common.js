@@ -1,5 +1,7 @@
 /**
- * Created by root on 10/30/14.
+ * @file common.js
+ * @brief common functions for the application
+ * @author Josh Madden <cyrex562@gmail.com>
  */
 
 /**
