@@ -12,14 +12,17 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="order_customer_id">
+
                     <h3>Items Ordered:</h3>
                     <table class="table table-striped">
                         <thead>
-                        <th>App Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                        <th></th>
+                        <tr>
+                            <th>App Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody id="order_table_body"></tbody>
                     </table>
@@ -83,7 +86,7 @@
                                 </label>
                             </div>
                             <div class="col-xs-8">
-                               <span id="order_details_shipping_address"></span>
+                                <span id="order_details_shipping_address"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -129,24 +132,21 @@
                     <h4 class="modal-title">Shopping Cart</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <table class="table table-striped" id="cart_table">
-                                <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Subtotal</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody id="cart_table_body">
-                                </tbody>
-                            </table>
-                            <div><strong>Total: </strong><span
-                                    id="cart_total"></span></div>
-                        </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="cart_table_body"></tbody>
+                    </table>
+                    <div>
+                        <strong>Total: </strong>
+                        <span id="cart_total"></span>
                     </div>
                     <!--/.container fluid-->
                 </div>
@@ -154,17 +154,20 @@
                 <div class="modal-footer">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="btn-group">
-                                <button id="check_out_btn" class="btn
+                            <div class="col-xs-12">
+                                <div class="btn-group">
+                                    <button id="check_out_btn" class="btn
                                 btn-primary">Check Out
-                                </button>
-                                <button id="continue_shopping_btn" class="btn
+                                    </button>
+                                    <button id="continue_shopping_btn" class="btn
                                 btn-success">Continue Shopping
-                                </button>
-                                <button id="clear_cart_btn" class="btn
+                                    </button>
+                                    <button id="clear_cart_btn" class="btn
                                 btn-warning">Clear Cart
-                                </button>
+                                    </button>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -187,11 +190,13 @@
                     <input type="hidden" value="" id="order_customer_id">
                     <table class="table table-striped">
                         <thead>
-                        <th>App Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                        <th></th>
+                            <tr>
+                                <th>App Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody id="order_table_body"></tbody>
                     </table>
@@ -236,8 +241,8 @@
                                 </label>
                             </div>
                             <div class="col-xs-8">
-                               <input type="text" id="order_customer_name"
-                                      class="form-control">
+                                <input type="text" id="order_customer_name"
+                                       class="form-control">
                             </div>
                         </div>
                         <div class="row">
@@ -412,11 +417,13 @@
     <div id="catalog-view">
         <table class="table table-striped">
             <thead>
-            <th><!--icon--></th>
-            <!--text-->
-            <th><!--price--></th>
-            <th><!--availability--></th>
-            <th><!--add to cart btn--></th>
+            <tr>
+                <th><!--icon--></th>
+                <!--text-->
+                <th><!--price--></th>
+                <th><!--availability--></th>
+                <th><!--add to cart btn--></th>
+            </tr>
             </thead>
             <tbody>
             {% for a in apps %}

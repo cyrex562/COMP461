@@ -34,6 +34,9 @@ import model_xml
 
 
 class RedisSession(CallbackDict, SessionMixin):
+    """
+    Redis Session object
+    """
     def __init__(self, initial=None, sid=None, new=False):
         def on_update(self):
             self.modified = True
@@ -45,6 +48,9 @@ class RedisSession(CallbackDict, SessionMixin):
 
 
 class RedisSessionInterface(SessionInterface):
+    """
+    Redis Session Interface Object
+    """
     serializer = pickle
     session_class = RedisSession
 
@@ -56,15 +62,24 @@ class RedisSessionInterface(SessionInterface):
 
     @staticmethod
     def generate_sid():
+        """
+        Generate the SID
+        """
         return str(uuid4())
 
     @staticmethod
     def get_redis_expiration_time(in_app, in_session):
+        """
+        Get the expiration time from redis
+        """
         if in_session.permanent:
             return in_app.permanent_session_lifetime
         return timedelta(days=1)
 
     def open_session(self, in_app, in_request):
+        """
+        Open a session
+        """
         sid = in_request.cookies.get(in_app.session_cookie_name)
         if not sid:
             sid = self.generate_sid()
@@ -76,11 +91,15 @@ class RedisSessionInterface(SessionInterface):
         return self.session_class(sid=sid, new=True)
 
     def save_session(self, in_app, in_session, response):
+        """
+        Save a session
+        """
         domain = self.get_cookie_domain(in_app)
         if not in_session:
             self.redis.delete(self.prefix + in_session.sid)
             if in_session.modified:
-                response.delete_cookie(in_app.session_cookie_name, domain=domain)
+                response.delete_cookie(in_app.session_cookie_name,
+                                       domain=domain)
             return
         redis_exp = self.get_redis_expiration_time(in_app, in_session)
         cookie_exp = self.get_expiration_time(in_app, in_session)
@@ -125,11 +144,21 @@ load_data()
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Load a user
+    :param user_id:
+    :return:
+    """
     user_result = get_user_by_id(user_id)
     return user_result
 
 
 def get_template_values(page_name):
+    """
+    Get the template values to populate pages with.
+    :param page_name:
+    :return:
+    """
     template_values = {'current_user': current_user, 'page': page_name}
     return template_values
 

@@ -1,3 +1,4 @@
+/* global $SCRIPT_ROOT */
 /**
  * Perform a POST request, on success call the callback and pass the response
  * rom the server
@@ -6,6 +7,7 @@
  * @param in_data data to pass to the server
  */
 function post_request(action, callback, in_data) {
+    console.log('sending request: ' + action + ', in_data: ' + in_data);
     $.ajax({
         type: "POST",
         url: $SCRIPT_ROOT + "/" + action,
@@ -26,9 +28,12 @@ function post_request(action, callback, in_data) {
  * @param response
  */
 function app_details_get_user_logged_in_cb(response) {
+    /** @namespace response.data.user_logged_in */
     if (!response.data.user_logged_in) {
+        console.log('disabling cart + checkout btn');
         $('#modal_add_to_cart_and_checkout_btn').prop('disabled', true);
     } else {
+        console.log('enabling cart + checkout btn');
         $('#modal_add_to_cart_and_checkout_btn').prop('disabled', false);
     }
 }
@@ -38,16 +43,28 @@ function app_details_get_user_logged_in_cb(response) {
  * @param result
  */
 function show_app_details_cb(result) {
+    console.log('showing the app details modal');
     $('#app_details_modal').modal('show');
+    /** @namespace result.data.app */
     var app = result.data.app;
+    console.log('app: ' + app);
+    /** @namespace app.app_image */
     $('#app_img').attr('src', '/static/img/' + app.app_image);
+    /** @namespace app.id */
     $('#app_id').text(app.id);
+    /** @namespace app.app_name */
     $('#app_name').text(app.app_name);
+    /** @namespace app.platform */
     $('#app_platform').text(app.platform);
+    /** @namespace app.platform_requirements */
     $('#app_platform_requirements').text(app.platform_requirements);
+    /** @namespace app.app_publisher */
     $('#app_plublisher').text(app.app_publisher);
+    /** @namespace app.app_description */
     $('#app_description').text(app.app_description);
+    /** @namespace app.license_count */
     $('#app_license_count').text(app.license_count);
+    /** @namespace app.price */
     $('#app_price').text('$' + app.price);
     post_request('user_logged_in', app_details_get_user_logged_in_cb, {});
 }
@@ -59,6 +76,7 @@ function show_app_details_cb(result) {
 function show_app_details(event) {
     var button = $(event.target);
     var app_id = button.val();
+    console.log('app_id: ' + app_id);
     post_request('app', show_app_details_cb, {app_id: app_id});
 }
 
@@ -68,6 +86,7 @@ function show_app_details(event) {
  */
 function add_to_cart_cb(result) {
     if (result.message === 'success') {
+        /** @namespace result.data.total_cart_items */
         $('#cart_badge').text(result.data.total_cart_items);
     } else {
         console.log('failed to add item to cart');
@@ -76,10 +95,10 @@ function add_to_cart_cb(result) {
 
 /**
  *
- * @param event
  */
-function add_to_cart(event) {
+function add_to_cart() {
     var app_id = $(this).val();
+    console.log('app_id: ' + app_id);
     var in_data = {
         app_id: app_id,
         quantity: $('#app_row_' + app_id + ' .add_to_cart_quantity').val()
@@ -92,15 +111,15 @@ function add_to_cart(event) {
  * @param result
  */
 function modal_add_to_cart_cb(result) {
+    console.log('hiding the app_details modal');
     $('#app_details_modal').modal('hide');
     add_to_cart_cb(result);
 }
 
 /**
  *
- * @param event
  */
-function modal_add_to_cart(event) {
+function modal_add_to_cart() {
     var in_data = { app_id: $('#app_id').val(),
         quantity: $('#app_details_modal_quantity').val()};
     post_request('add_to_cart', modal_add_to_cart_cb, in_data);
@@ -111,6 +130,7 @@ function modal_add_to_cart(event) {
  * @param result
  */
 function modal_add_to_cart_and_checkout_cb(result) {
+    console.log('hiding the app_details modal');
     $('#app_details_modal').modal('hide');
     add_to_cart_cb(result);
     show_check_out()
@@ -118,9 +138,8 @@ function modal_add_to_cart_and_checkout_cb(result) {
 
 /**
  *
- * @param event
  */
-function modal_add_to_cart_and_checkout(event) {
+function modal_add_to_cart_and_checkout() {
     var in_data = { app_id: $('#app_id').val(),
         quantity: $('#app_details_modal_quantity').val()};
     post_request('add_to_cart', modal_add_to_cart_and_checkout_cb, in_data);
@@ -132,7 +151,8 @@ function modal_add_to_cart_and_checkout(event) {
  * @returns {string}
  */
 function gen_cart_row(cart_item) {
-    var row = '' +
+    /** @namespace cart_item.subtotal */
+    return '' +
         '<tr id="' + cart_item.app.id + '">' +
         '<td>' + cart_item.app.app_name + '</td>' +
         '<td><div class="container-fluid"><div class="row"><div class="col-xs-7">' +
@@ -143,7 +163,6 @@ function gen_cart_row(cart_item) {
         '<td><button class="btn btn-xs remove_item_btn" value="' + cart_item.app.id + '">' +
         '<span class="glyphicon glyphicon-remove"></span></button></td>' +
         '</tr>';
-    return row;
 }
 
 /**
@@ -155,13 +174,15 @@ function remove_item_from_checkout_cb(result) {
         var order_table_body = $('#order_table_body');
         order_table_body.empty();
 
+        /** @namespace result.data.cart */
         var cart = result.data.cart;
+        /** @namespace cart.items */
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
             order_table_body.append(gen_cart_row(cart_item));
         }
 
-        $('.app_quantity').bind('keyup change click', function (e) {
+        $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
                 $(this).data("previousValue") != $(this).val()) {
                 $(this).data("previousValue", $(this).val());
@@ -171,13 +192,17 @@ function remove_item_from_checkout_cb(result) {
             }
         });
 
-        $('.remove_item_btn').click(function (event) {
+        $('.remove_item_btn').click(function () {
             remove_item_from_checkout(parseInt($(this).val()));
         });
 
+        /** @namespace result.data.cart.total */
         $('#order_subtotal').text('$' + result.data.cart.total);
+        /** @namespace result.data.handling_fee */
         $('#order_handling_fee').text('$' + result.data.handling_fee);
+        /** @namespace result.data.tax */
         $('#order_tax').text('$' + result.data.tax);
+        /** @namespace result.data.order_total */
         $('#order_total').text('$' + result.data.order_total) ;
     }
 }
@@ -187,7 +212,8 @@ function remove_item_from_checkout_cb(result) {
  * @param app_id
  */
 function remove_item_from_checkout(app_id) {
-    post_request('remove_item_from_cart', remove_item_from_checkout_cb, {app_id: app_id});
+    post_request('remove_item_from_cart', remove_item_from_checkout_cb,
+        {app_id: app_id});
 }
 
 /**
@@ -240,8 +266,11 @@ function change_checkout_item_quantity(app_id, new_quantity) {
  *     'tax': DECIMAL }}
  */
 function show_check_out_cb(result) {
+    console.log('show the checkout modal');
     if (result.message === 'success') {
+        /** @namespace result.data.customer.person_name */
         $('#order_customer_name').val(result.data.customer.person_name);
+        /** @namespace result.data.customer.email_address */
         $('#order_customer_email').val(result.data.customer.email_address);
         $('#order_shipping_address').val(result.data.customer.shipping_address);
         $('#order_billing_address').val(result.data.customer.billing_address);
@@ -256,10 +285,11 @@ function show_check_out_cb(result) {
         var cart = result.data.cart;
         for (var i = 0; i < cart.items.length; i++) {
             var cart_item = cart.items[i];
-            order_table_body.append(gen_cart_row(cart_item));
+            var cart_row = gen_cart_row(cart_item);
+            order_table_body.append(cart_row);
         }
 
-        $('.app_quantity').bind('keyup change click', function (e) {
+        $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
                 $(this).data("previousValue") != $(this).val()) {
                 $(this).data("previousValue", $(this).val());
@@ -269,24 +299,28 @@ function show_check_out_cb(result) {
             }
         });
 
-        $('.remove_item_btn').click(function (event) {
+        $('.remove_item_btn').click(function () {
             remove_item_from_checkout(parseInt($(this).val()));
         });
 
-
+        $('#checkout_modal').modal('show');
     } else {
         console.log('failed to get checkout data');
     }
  }
 
-
+/**
+ *
+ */
 function show_check_out() {
     $('#cart_modal').modal('hide');
-    $('#checkout_modal').modal('show');
     post_request('get_checkout_data', show_check_out_cb, {});
 }
 
-
+/**
+ *
+ * @param result
+ */
 function change_cart_item_quantity_cb(result) {
     if (result.message === 'success') {
         var cart_item = undefined;
@@ -301,6 +335,11 @@ function change_cart_item_quantity_cb(result) {
     }
 }
 
+/**
+ *
+ * @param app_id
+ * @param new_quantity
+ */
 function change_cart_item_quantity(app_id, new_quantity) {
     if (new_quantity > 0) {
         post_request('change_cart_item_quantity', change_cart_item_quantity_cb,
@@ -326,9 +365,11 @@ function cart_user_logged_in_cb(response) {
     }
 }
 
+/**
+ *
+ * @param result
+ */
 function get_cart_cb(result) {
-    $('#cart_modal').modal('show');
-
     if (result.message === 'success') {
         var cart_table_body = $('#cart_table_body');
         cart_table_body.empty();
@@ -338,7 +379,7 @@ function get_cart_cb(result) {
             cart_table_body.append(gen_cart_row(cart_item));
         }
 
-        $('.app_quantity').bind('keyup change click', function (e) {
+        $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
                 $(this).data("previousValue") != $(this).val()) {
                 $(this).data("previousValue", $(this).val());
@@ -348,30 +389,41 @@ function get_cart_cb(result) {
             }
         });
 
-        $('.remove_item_btn').click(function (event) {
+        $('.remove_item_btn').click(function () {
             remove_item_from_cart(parseInt($(this).val()));
         });
 
         $('#cart_total').text('$' + cart.total);
 
+        $('#cart_modal').modal('show');
         post_request('user_logged_in', cart_user_logged_in_cb, {});
     } else {
         console.log('failed to get cart');
     }
 }
 
-
+/**
+ *
+ * @param event
+ */
 function get_cart(event) {
     event.preventDefault();
     post_request('cart', get_cart_cb, {});
 }
 
+/**
+ *
+ * @param result
+ */
 function update_cart_items_count_cb(result) {
     if (result.message === 'success') {
         $('#cart_badge').text(result.data.total_cart_items);
     }
 }
 
+/**
+ *
+ */
 function update_cart_items_count() {
     post_request('cart_items_count', update_cart_items_count_cb, {});
 }
@@ -389,7 +441,7 @@ function remove_item_from_cart_cb(result) {
             var cart_item = cart.items[i];
             cart_table_body.append(gen_cart_row(cart_item));
         }
-        $('.app_quantity').bind('keyup change click', function (e) {
+        $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
                 $(this).data("previousValue") != $(this).val()) {
                 $(this).data("previousValue", $(this).val());
@@ -399,7 +451,7 @@ function remove_item_from_cart_cb(result) {
             }
         });
 
-        $('.remove_item_btn').click(function(event) {
+        $('.remove_item_btn').click(function() {
             remove_item_from_cart(parseInt($(this).val()));
         });
 
@@ -407,10 +459,18 @@ function remove_item_from_cart_cb(result) {
     }
 }
 
+/**
+ *
+ * @param app_id
+ */
 function remove_item_from_cart(app_id) {
     post_request('remove_item_from_cart', remove_item_from_cart_cb, {app_id: app_id});
 }
 
+/**
+ *
+ * @param result
+ */
 function clear_shopping_cart_cb(result) {
     if (result.message === 'success') {
         var cart_table_body = $('#cart_table_body');
@@ -420,7 +480,7 @@ function clear_shopping_cart_cb(result) {
             var cart_item = cart.items[i];
             cart_table_body.append(gen_cart_row(cart_item));
         }
-        $('.app_quantity').bind('keyup change click', function (e) {
+        $('.app_quantity').bind('keyup change click', function () {
             if (!$(this).data("previousValue") ||
                 $(this).data("previousValue") != $(this).val()) {
                 $(this).data("previousValue", $(this).val());
@@ -430,7 +490,7 @@ function clear_shopping_cart_cb(result) {
             }
         });
 
-        $('.remove_item_btn').click(function(event) {
+        $('.remove_item_btn').click(function() {
             remove_item_from_cart(parseInt($(this).val()));
         });
 
@@ -438,11 +498,17 @@ function clear_shopping_cart_cb(result) {
     }
 }
 
+/**
+ *
+ */
 function clear_shopping_cart() {
     post_request('clear_cart', clear_shopping_cart_cb, {});
 }
 
-function same_address_cbx_change(event) {
+/**
+ *
+ */
+function same_address_cbx_change() {
     if ($(this).is(':checked')) {
         $('#order_shipping_address').prop('disabled', true);
     } else {
@@ -450,17 +516,25 @@ function same_address_cbx_change(event) {
     }
 }
 
+/**
+ *
+ * @param item
+ * @returns {string}
+ */
 function gen_order_details_row(item) {
-    var row = '' +
+    return '' +
         '<tr>' +
         '<td>' + item.app.app_name + '</td>' +
-        '<td>'+ item.app.quantity + '</td>' +
+        '<td>' + item.app.quantity + '</td>' +
         '<td>$' + item.app.price + '</td>' +
         '<td>$' + item.subtotal + '</td>' +
         '</tr>';
-    return row;
 }
 
+/**
+ *
+ * @param result
+ */
 function place_order_cb(result) {
     if (result.message === 'success') {
         $('#checkout_modal').modal('hide');
@@ -470,19 +544,25 @@ function place_order_cb(result) {
         $('#order_details_billing_address').text(result.data.order.billing_address);
         $('#order_details_shipping_address').text(result.data.order.shipping_address);
         $('#order_details_handling_fee').text(result.data.order.handling_fee);
+        /** @namespace result.data.order.tax_amount */
         $('#order_details_tax').text(result.data.order.tax_amount);
+        /** @namespace result.data.order.total_cost */
         $('#order_details_total').text(result.data.order.total_cost);
         $('#order_details_subtotal').text(result.data.order.subtotal);
-        $('#order_details_table_body').empty();
+        var order_details_table_body = $('#order_details_table_body');
+        order_details_table_body.empty();
         for (var i=0; i < result.data.cart.items.length; i++) {
-            $('#order_details_table_body').append(
+            order_details_table_body.append(
                 gen_order_details_row(result.data.cart.items[i]));
         }
     } else if (result.message === 'failure, invalid app quantity') {
-        $('#order_errors').empty();
+        var order_errors = $('#order_errors');
+        order_errors.empty();
+        /** @namespace result.data.invalid_items */
         for (var j = 0; j < result.data.invalid_items.length; j++) {
             var invalid_item = result.data.invalid_items[j];
             var order_error = "";
+            /** @namespace invalid_item.available */
             if (invalid_item.available == 0) {
                 order_error = '<div class="alert alert-warning ' +
                 'alert-dismissible" role="alert"><button type="button" ' +
@@ -491,6 +571,7 @@ function place_order_cb(result) {
                 'no licenses available for ' + invalid_item.name +
                 '</div>';
             } else if (invalid_item.available > 0) {
+                /** @namespace invalid_item.requested */
                 order_error = '<div class="alert alert-warning ' +
                 'alert-dismissible" role="alert"><button type="button" ' +
                 'class="close" data-dismiss="alert"><span aria-hidden="true">' +
@@ -500,13 +581,16 @@ function place_order_cb(result) {
                 invalid_item.available + ')' + '</div>';
             }
 
-            $('#order_errors').append(order_error);
+            order_errors.append(order_error);
         }
     } else {
         console.log('error occurred placing order ' + result);
     }
 }
 
+/**
+ *
+ */
 function place_order() {
     var in_data = {
         customer_id: $('#order_customer_id').val()

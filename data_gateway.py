@@ -1,3 +1,7 @@
+"""
+@file data_gateway.py
+@brief data gateway operations
+"""
 import jsonpickle
 import redis
 from utils import log_msg
@@ -45,11 +49,16 @@ def add_table_row(table_name, row):
 
 
 def set_table(table_name, new_table):
+    """
+    Set the table stored in redis ot the new table
+    :param table_name:
+    :param new_table:
+    :return:
+    """
     mod_table_name = '{0}:{1}'.format(REDIS_KEY, table_name)
     redis_ctx.delete(mod_table_name)
     for nti in new_table:
         redis_ctx.rpush(mod_table_name, jsonpickle.encode(nti))
-    # redis_ctx.rpush(mod_table_name, [jsonpickle.encode(nti) for nti in new_table])
 
 
 def get_value(key):
@@ -60,25 +69,3 @@ def get_value(key):
     """
     value = redis_ctx.get(key)
     return value
-
-
-def persist_table(table_name):
-    # TODO implement
-    pass
-
-
-def persist_row(table_name, row):
-    # TODO implement
-    pass
-
-
-def persist_db():
-    # TODO implement
-    pass
-
-################################################################################
-# END OF FILE
-################################################################################
-
-
-

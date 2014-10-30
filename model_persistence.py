@@ -1,8 +1,12 @@
+"""
+@file model_persistence.py
+@author Josh Madden <cyrex562@gmail.com>
+@copyright Perfecta Federal 2014
+"""
 from model_ops import get_all_users, get_all_customers, get_all_apps, \
     get_all_orders
 from model_xml import append_xml_tag
 
-__author__ = 'root'
 
 def user_data_storage_handler(soup):
     """

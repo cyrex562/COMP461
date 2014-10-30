@@ -62,7 +62,8 @@ def app_data_loader(soup):
             app_to_add.app_publisher = get_xml_tag_string(app_xml.app_publisher)
             app_to_add.app_description = get_xml_tag_string(
                 app_xml.app_description)
-            app_to_add.license_count = int(get_xml_tag_string(app_xml.license_count))
+            app_to_add.license_count = \
+                int(get_xml_tag_string(app_xml.license_count))
             app_to_add.app_image = get_xml_tag_string(app_xml.app_image)
             app_to_add.price = float(get_xml_tag_string(app_xml.price))
             add_table_row('apps', app_to_add)
@@ -84,8 +85,10 @@ def customer_data_loader(soup):
                 customer_xml.billing_address)
             customer_to_add.shipping_address = get_xml_tag_string(
                 customer_xml.shipping_address)
-            customer_to_add.email_address = get_xml_tag_string(customer_xml.email_address)
-            customer_to_add.person_name = get_xml_tag_string(customer_xml.person_name)
+            customer_to_add.email_address = \
+                get_xml_tag_string(customer_xml.email_address)
+            customer_to_add.person_name = \
+                get_xml_tag_string(customer_xml.person_name)
             customer_to_add.rating = get_xml_tag_string(customer_xml.rating)
             add_table_row('customers', customer_to_add)
 

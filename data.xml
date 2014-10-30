@@ -97,7 +97,7 @@
     NOT SET
    </app_description>
    <license_count>
-    14
+    11
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -367,6 +367,96 @@
      </quantity>
      <subtotal>
       4.95
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="0">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="0">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="0">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
      </subtotal>
     </order_item>
    </items>

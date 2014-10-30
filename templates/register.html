@@ -7,7 +7,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-5">
-                    <form role="form" action="register" method="post">
+                    <form role="form"
+                          action="{{ url_for("register_page_controller") }}"
+                          method="post">
                         <fieldset>
                             <legend>User Information</legend>
                             <div class="form-group">
@@ -17,9 +19,9 @@
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="email-address">E-Mail</label>
+                                <label for="email_address">E-Mail</label>
                                 <input type="text" name="email_address"
-                                       id="email-addres"
+                                       id="email_address"
                                        class="form-control">
                             </div>
                             <div class="form-group">
@@ -34,30 +36,34 @@
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="confirm-password">Confirm Password</label>
+                                <label for="confirm_password">
+                                    Confirm Password
+                                </label>
                                 <input type="password" name="confirm_password"
-                                       id="confirm-password"
+                                       id="confirm_password"
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="secret-question">Secret Question</label>
+                                <label for="secret_question">
+                                    Secret Question
+                                </label>
                                 <input type="text" name="secret_question"
-                                       id="secret-question"
+                                       id="secret_question"
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="secret-answer">Secret Answer</label>
+                                <label for="secret_answer">Secret Answer</label>
                                 <input type="text" name="secret_answer"
-                                       id="secret-answer"
+                                       id="secret_answer"
                                        class="form-control">
                             </div>
                         </fieldset>
                         <fieldset>
                             <legend>Billing Address</legend>
                             <div class="form-group">
-                                <label for="billing-address">Address</label>
+                                <label for="billing_address">Address</label>
                                 <input type="text" name="billing_address"
-                                       id="billing-address"
+                                       id="billing_address"
                                        class="form-control">
                             </div>
                         </fieldset>
@@ -68,23 +74,23 @@
                                     <input type="checkbox"
                                            name="use-billing-address"
                                            value=""
-                                           id="use-billing-address">
+                                           id="use_billing_address">
                                     Use Billing Address
                                 </label>
                             </div>
                             <div class="form-group">
-                                <label for="shipping-address">Address</label>
+                                <label for="shipping_address">Address</label>
                                 <input type="text" name="shipping_address"
-                                       id="shipping-address"
+                                       id="shipping_address"
                                        class="form-control">
                             </div>
                         </fieldset>
                         <div class="btn-group">
                             <button type="submit" class="btn btn-primary"
-                                    id="register-btn"
+                                    id="register_btn"
                                     value="register">Register</button>
                             <button class="btn btn-default"
-                                    id="reset-btn">Reset</button>
+                                    id="reset_btn">Reset</button>
                         </div>
                     </form>
                 </div>
