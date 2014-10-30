@@ -141,7 +141,7 @@ function gen_cart_row(cart_item) {
         '<td>$' + cart_item.app.price + '</td>' +
         '<td class="cart_item_subtotal">$' + cart_item.subtotal + '</td>' +
         '<td><button class="btn btn-xs remove_item_btn" value="' + cart_item.app.id + '">' +
-        '<span class="glyphicon glyphicon-remove"></span></button>' +
+        '<span class="glyphicon glyphicon-remove"></span></button></td>' +
         '</tr>';
     return row;
 }
@@ -248,7 +248,8 @@ function show_check_out_cb(result) {
         $('#order_subtotal').text('$' + result.data.cart.total);
         $('#order_handling_fee').text('$' + result.data.handling_fee);
         $('#order_tax').text('$' + result.data.tax);
-        $('#order_total').text('$' + result.data.order_total) ;
+        $('#order_total').text('$' + result.data.order_total);
+        $('#order_customer_id').val(result.data.customer.id);
         var order_table_body = $('#order_table_body');
         order_table_body.empty();
 
@@ -410,6 +411,120 @@ function remove_item_from_cart(app_id) {
     post_request('remove_item_from_cart', remove_item_from_cart_cb, {app_id: app_id});
 }
 
+function clear_shopping_cart_cb(result) {
+    if (result.message === 'success') {
+        var cart_table_body = $('#cart_table_body');
+        cart_table_body.empty();
+        var cart = result.data.cart;
+        for (var i = 0; i < cart.items.length; i++) {
+            var cart_item = cart.items[i];
+            cart_table_body.append(gen_cart_row(cart_item));
+        }
+        $('.app_quantity').bind('keyup change click', function (e) {
+            if (!$(this).data("previousValue") ||
+                $(this).data("previousValue") != $(this).val()) {
+                $(this).data("previousValue", $(this).val());
+                var app_id = $(this).data("options").app_id;
+                var new_quantity = parseInt($(this).val());
+                change_cart_item_quantity(app_id, new_quantity);
+            }
+        });
+
+        $('.remove_item_btn').click(function(event) {
+            remove_item_from_cart(parseInt($(this).val()));
+        });
+
+        $('#cart_total').text('$' + cart.total);
+    }
+}
+
+function clear_shopping_cart() {
+    post_request('clear_cart', clear_shopping_cart_cb, {});
+}
+
+function same_address_cbx_change(event) {
+    if ($(this).is(':checked')) {
+        $('#order_shipping_address').prop('disabled', true);
+    } else {
+        $('#order_shipping_address').prop('disabled', false);
+    }
+}
+
+function gen_order_details_row(item) {
+    var row = '' +
+        '<tr>' +
+        '<td>' + item.app.app_name + '</td>' +
+        '<td>'+ item.app.quantity + '</td>' +
+        '<td>$' + item.app.price + '</td>' +
+        '<td>$' + item.subtotal + '</td>' +
+        '</tr>';
+    return row;
+}
+
+function place_order_cb(result) {
+    if (result.message === 'success') {
+        $('#checkout_modal').modal('hide');
+        $('#order_details_modal').modal('show');
+        $('#order_details_customer_name').text(result.data.customer.person_name);
+        $('#order_details_customer_email').text(result.data.customer.email_address);
+        $('#order_details_billing_address').text(result.data.order.billing_address);
+        $('#order_details_shipping_address').text(result.data.order.shipping_address);
+        $('#order_details_handling_fee').text(result.data.order.handling_fee);
+        $('#order_details_tax').text(result.data.order.tax_amount);
+        $('#order_details_total').text(result.data.order.total_cost);
+        $('#order_details_subtotal').text(result.data.order.subtotal);
+        $('#order_details_table_body').empty();
+        for (var i=0; i < result.data.cart.items.length; i++) {
+            $('#order_details_table_body').append(
+                gen_order_details_row(result.data.cart.items[i]));
+        }
+    } else if (result.message === 'failure, invalid app quantity') {
+        $('#order_errors').empty();
+        for (var j = 0; j < result.data.invalid_items.length; j++) {
+            var invalid_item = result.data.invalid_items[j];
+            var order_error = "";
+            if (invalid_item.available == 0) {
+                order_error = '<div class="alert alert-warning ' +
+                'alert-dismissible" role="alert"><button type="button" ' +
+                'class="close" data-dismiss="alert"><span aria-hidden="true">' +
+                '&times;</span><span class="sr-only">Close</span></button>' +
+                'no licenses available for ' + invalid_item.name +
+                '</div>';
+            } else if (invalid_item.available > 0) {
+                order_error = '<div class="alert alert-warning ' +
+                'alert-dismissible" role="alert"><button type="button" ' +
+                'class="close" data-dismiss="alert"><span aria-hidden="true">' +
+                '&times;</span><span class="sr-only">Close</span></button>' +
+                'requested licenses (' + invalid_item.requested  + ') for ' +
+                invalid_item.name +  ' exceeds available (' +
+                invalid_item.available + ')' + '</div>';
+            }
+
+            $('#order_errors').append(order_error);
+        }
+    } else {
+        console.log('error occurred placing order ' + result);
+    }
+}
+
+function place_order() {
+    var in_data = {
+        customer_id: $('#order_customer_id').val()
+    };
+
+    var order_billing_address = $('#order_billing_address');
+
+    if ($('#same_address_cbx').is(':checked')) {
+        in_data.shipping_address = order_billing_address.val();
+        in_data.billing_address = order_billing_address.val();
+    } else {
+        in_data.shipping_address = $('#order_shipping_address').val();
+        in_data.billing_address = order_billing_address.val();
+    }
+
+    post_request('place_order', place_order_cb, in_data);
+}
+
 
 $(document).ready(function () {
     $('.add_to_cart_btn').click(add_to_cart);
@@ -430,5 +545,12 @@ $(document).ready(function () {
     $('#cancel_checkout_btn').click(function() {
        $('#checkout_modal').modal('hide');
     });
+    $('#clear_cart_btn').click(clear_shopping_cart);
     update_cart_items_count();
+    $('#same_address_cbx').change(same_address_cbx_change);
+    $('#place_order_btn').click(place_order);
+    $('#confirm_order_placed_btn').click(function() {
+        $('#order_details_modal').modal('hide');
+        location.reload();
+    })
 });

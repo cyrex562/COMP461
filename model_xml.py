@@ -3,29 +3,20 @@
 @brief model xml operations
 @author Josh Madden <cyrex562@gmail.com>
 """
-################################################################################
-# IMPORTS
-################################################################################
 import os
+
 from bs4 import BeautifulSoup
+
 from data_gateway import add_table_row
 from model_objects import User, App, Customer, Order, CartItem
-from model_ops import get_all_users, get_all_customers, get_all_apps, \
-    get_all_orders
 import utils
 
-################################################################################
-# DEFINES
-################################################################################
 XML_FILE = 'data.xml'
 
 load_data_handlers = []
 store_data_handlers = []
 
 
-################################################################################
-# FUNCTIONS
-################################################################################
 def get_xml_tag_string(soup_ele):
     """
     Get the string contents of an XML tag from the DOM
@@ -46,7 +37,7 @@ def user_data_loader(soup):
         if user_child_xml.string != '\n':
             user_to_add = User()
             user_to_add.id = user_child_xml['id']
-            user_to_add.user_type = user_child_xml['user_type']
+            user_to_add.user_type = get_xml_tag_string(user_child_xml.user_type)
             user_to_add.username = get_xml_tag_string(user_child_xml.username)
             user_to_add.password = get_xml_tag_string(user_child_xml.password)
             add_table_row('users', user_to_add)
@@ -148,88 +139,6 @@ def append_xml_tag(soup, tag_parent, tag_name, tag_val):
     tag_parent.append(new_tag)
 
 
-def user_data_storage_handler(soup):
-    """
-    Store users from redis store into xml file
-    :param soup:
-    :return:
-    """
-    users = get_all_users()
-    for u in users:
-        new_user_tag = soup.new_tag('user', id=u.id)
-        append_xml_tag(soup, new_user_tag, 'username', u.username)
-        append_xml_tag(soup, new_user_tag, 'password', u.password)
-        soup.data.users.append(new_user_tag)
-
-
-def customer_data_storage_handler(soup):
-    """
-    Store customers from redis store into xml file
-    :param soup:
-    :return:
-    """
-    customers = get_all_customers()
-    for c in customers:
-        new_customer_tag = soup.new_tag('customer', id=c.id)
-        append_xml_tag(soup, new_customer_tag, 'user_id', c.user_id)
-        append_xml_tag(soup, new_customer_tag, 'billing_address',
-                       c.billing_address)
-        append_xml_tag(soup, new_customer_tag, 'shipping_address',
-                       c.shipping_address)
-        append_xml_tag(soup, new_customer_tag, 'email_address', c.email_address)
-        append_xml_tag(soup, new_customer_tag, 'person_name', c.person_name)
-        append_xml_tag(soup, new_customer_tag, 'rating', c.rating)
-        soup.data.customers.append(new_customer_tag)
-
-
-def app_data_storage_handler(soup):
-    """
-    Store apps from redis store into xml file
-    :param soup:
-    :return:
-    """
-    apps = get_all_apps()
-    for a in apps:
-        new_app_tag = soup.new_tag('app', id=a.id)
-        append_xml_tag(soup, new_app_tag, 'app_name', a.app_name)
-        append_xml_tag(soup, new_app_tag, 'download_link', a.download_link)
-        append_xml_tag(soup, new_app_tag, 'platform', a.platform)
-        append_xml_tag(soup, new_app_tag, 'platform_requirements',
-                       a.platform_requirements)
-        append_xml_tag(soup, new_app_tag, 'app_publisher', a.app_publisher)
-        append_xml_tag(soup, new_app_tag, 'app_description', a.app_description)
-        append_xml_tag(soup, new_app_tag, 'license_count', str(a.license_count))
-        append_xml_tag(soup, new_app_tag, 'app_image', a.app_image)
-        append_xml_tag(soup, new_app_tag, 'price', str(a.price))
-        soup.data.apps.append(new_app_tag)
-
-
-def order_data_storage_handler(soup):
-    """
-    Store orders from redis store into xml file
-    :param soup:
-    :return:
-    """
-    orders = get_all_orders()
-    for o in orders:
-        new_order_tag = soup.new_tag('order', id=o.id)
-        append_xml_tag(soup, new_order_tag, 'order_handling_fee',
-                       o.handling_fee)
-        append_xml_tag(soup, new_order_tag, 'order_tax_amount', o.tax_amount)
-        append_xml_tag(soup, new_order_tag, 'order_total_cost', o.total_cost)
-        append_xml_tag(soup, new_order_tag, 'order_subtotal', o.subtotal)
-        append_xml_tag(soup, new_order_tag, 'order_customer_id', o.customer_id)
-        items_tag = soup.new_tag('items')
-        new_order_tag.append(items_tag)
-        for i in o.items:
-            new_item_tag = soup.new_tag('order_item')
-            append_xml_tag(soup, new_item_tag, 'app_id', i.app_id)
-            append_xml_tag(soup, new_item_tag, 'quantity', i.quantity)
-            append_xml_tag(soup, new_item_tag, 'subtotal', i.subtotal)
-            new_order_tag.items.append(new_item_tag)
-        soup.data.orders.append(new_order_tag)
-
-
 def load_data():
     """
     Load the persistent data from the data xml file.
@@ -251,16 +160,12 @@ def store_data():
     soup.append(soup.new_tag('data'))
     soup.data.append(soup.new_tag('users'))
     soup.data.append(soup.new_tag('customers'))
-    soup.data.append(soup.new_tag('products'))
+    soup.data.append(soup.new_tag('apps'))
+    soup.data.append(soup.new_tag('orders'))
     for f in store_data_handlers:
         f(soup)
     out_xml = soup.prettify()
-    xml_file = open(os.getcwd() + '/enterprise_app_project/' +
-                    XML_FILE, 'wb')
+    path = os.path.dirname(utils.__file__)
+    xml_file = open(path + '/' + XML_FILE, 'wb')
     xml_file.write(out_xml)
     xml_file.close()
-
-
-################################################################################
-# END OF FILE
-################################################################################

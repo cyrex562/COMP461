@@ -4,16 +4,11 @@
 @author Josh Madden
 @copyright Fifth Column Group 2014
 """
-###############################################################################
-# IMPORTS
-###############################################################################
+from flask.ext.login import UserMixin
+
 import datetime
-from flask.ext.login import UserMixin, AnonymousUserMixin
 
 
-################################################################################
-# DEFINES
-################################################################################
 class Cart():
     """
     Shopping Cart object
@@ -104,8 +99,5 @@ class Order(object):
         self.total_cost = 0.0
         self.subtotal = 0.0
         self.customer_id = 0
-
-
-###############################################################################
-# END OF FILE
-###############################################################################
+        self.shipping_address = ''
+        self.billing_address = ''

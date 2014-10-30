@@ -3,8 +3,9 @@
 @brief data model operations, rules, and logic
 @author Josh Madden <cyrex562@gmail.com>
 """
-from data_gateway import get_table, add_table_row
-from model_objects import User
+from data_gateway import get_table, add_table_row, set_table
+from model_objects import User, Order, Customer
+from model_xml import store_data
 
 
 def get_all_users():
@@ -87,6 +88,15 @@ def get_next_customer_id():
     return next_customer_id
 
 
+def get_next_order_id():
+    orders = get_all_orders()
+    next_order_id = 0
+    for o in orders:
+        if int(o.id) > next_order_id:
+            next_order_id = int(o.id) + 1
+    return next_order_id
+
+
 def get_user_by_username(in_username):
     found_user = None
     users = get_all_users()
@@ -128,6 +138,10 @@ def add_customer(new_customer):
     add_table_row('customers', new_customer)
 
 
+def add_order(new_order):
+    add_table_row('orders', new_order)
+
+
 def add_item_to_cart(item, cart):
     cart.items.append(item)
     return cart
@@ -141,6 +155,11 @@ def remove_item_from_cart(cart, app_id):
             break
     if item_to_remove is not None:
         cart.items.remove(item_to_remove)
+    return cart
+
+
+def clear_cart(cart):
+    cart.items = []
     return cart
 
 
@@ -186,6 +205,64 @@ def calc_order_total(cart, tax, handling_fee):
     return round(cart.total + tax + handling_fee, 2)
 
 
-################################################################################
-# END OF FILE
-################################################################################
+def check_stock(cart):
+    result = []
+    for item in cart.items:
+        inventory_item = get_app_by_id(item.app_id)
+        if item.quantity > inventory_item.license_count:
+            result.append({'app_id': item.app_id, 'name':
+                inventory_item.app_name, 'requested': item.quantity,
+                'available': inventory_item.license_count})
+    return result
+
+
+def place_order(customer, cart, handling_fee, tax, order_total,
+                shipping_address, billing_address):
+    order = Order()
+    order.id = get_next_order_id()
+    order.items = cart.items
+    order.handling_fee = handling_fee
+    order.tax_amount = tax
+    order.total_cost = order_total
+    order.subtotal = cart.total
+    order.customer_id = customer.id
+    order.shipping_address = shipping_address
+    order.billing_address = billing_address
+    add_order(order)
+
+
+def update_app_license_count(app, new_license_count):
+    apps = get_all_apps()
+    for i in range(0, len(apps)-1):
+        if str(apps[i].id) == str(app.id):
+            apps[i].license_count = new_license_count
+    set_table('apps', apps)
+
+
+def register_user(request):
+    # TODO validate
+    success = True
+    new_user = User()
+    new_user.id = unicode(get_next_user_id())
+    new_user.username = request.form['username']
+    new_user.password = request.form['password']
+    add_user(new_user)
+
+    new_customer = Customer()
+    new_customer.id = unicode(get_next_customer_id())
+    new_customer.user_id = new_user.id
+    new_customer.billing_address = request.form['billing_address']
+    new_customer.email_address = request.form['email_address']
+    new_customer.shipping_address = request.form['shipping_address']
+    new_customer.person_name = request.form['person_name']
+    add_customer(new_customer)
+    store_data()
+    return success
+
+
+def adjust_inventory(cart):
+    for item in cart.items:
+        app = get_app_by_id(item.app_id)
+        new_license_count = app.license_count - item.quantity
+        update_app_license_count(app, new_license_count)
+    store_data()

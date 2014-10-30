@@ -1,5 +1,123 @@
 {% extends "base.html" %}
 {% block body %}
+    <!-- order details modal -->
+    <div class="modal fade" id="order_details_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Your Order Has Been Placed</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="order_customer_id">
+                    <h3>Items Ordered:</h3>
+                    <table class="table table-striped">
+                        <thead>
+                        <th>App Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                        </thead>
+                        <tbody id="order_table_body"></tbody>
+                    </table>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Order Subtotal</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_subtotal"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Handling Fee</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_handling_fee"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Tax</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_tax"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Order Total</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_total"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_customer_name">
+                                    Name
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_customer_name"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_customer_email">
+                                    E-mail
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_customer_email"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_shipping_address">
+                                    Shipping Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                               <span id="order_details_shipping_address"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_billing_address">
+                                    Billing Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_billing_address"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.container fluid-->
+                </div>
+                <!--./modal body-->
+                <div class="modal-footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="btn-group">
+                                <button id="confirm_order_placed_btn"
+                                        class="btn btn-success">
+                                    Great!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--./modal-footer-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal --><!--/checkout_modall-->
     <!-- cart modal -->
     <div class="modal fade" id="cart_modal">
         <div class="modal-dialog">
@@ -43,6 +161,9 @@
                                 <button id="continue_shopping_btn" class="btn
                                 btn-success">Continue Shopping
                                 </button>
+                                <button id="clear_cart_btn" class="btn
+                                btn-warning">Clear Cart
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -60,73 +181,109 @@
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span><span
                             class="sr-only">Close</span></button>
-                    <h4 class="modal-title">App Details</h4>
+                    <h4 class="modal-title">Check Out</h4>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" value="" id="order_customer_id">
+                    <table class="table table-striped">
+                        <thead>
+                        <th>App Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                        </thead>
+                        <tbody id="order_table_body"></tbody>
+                    </table>
+                    <div id="order_errors"></div>
                     <div class="container-fluid">
                         <div class="row">
-                            <table class="table table-striped">
-                                <thead>
-                                <th>App Name</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Subtotal</th>
-                                <th></th>
-                                </thead>
-                                <tbody id="order_table_body"></tbody>
-                            </table>
+                            <div class="col-xs-3">
+                                <span><strong>Order Subtotal</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_subtotal"></span>
+                            </div>
                         </div>
                         <div class="row">
-                            <span>Order Subtotal</span>
-                            <span id="order_subtotal"></span>
+                            <div class="col-xs-3">
+                                <span><strong>Handling Fee</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_handling_fee"></span>
+                            </div>
                         </div>
                         <div class="row">
-                            <span>Handling Fee</span>
-                            <span id="order_handling_fee"></span>
+                            <div class="col-xs-3">
+                                <span><strong>Tax</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_tax"></span>
+                            </div>
                         </div>
                         <div class="row">
-                            <span>Tax</span>
-                            <span id="order_tax"></span>
+                            <div class="col-xs-3">
+                                <span><strong>Order Total</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_total"></span>
+                            </div>
                         </div>
                         <div class="row">
-                            <span>Order Total</span>
-                            <span id="order_total"></span>
-                        </div>
-                        <div class="row">
-                            <label>
-                                Customer Name
-                                <input type="text" id="order_customer_name"
-                                       class="form-control">
-                            </label>
-                        </div>
-                        <div class="row">
-                            <label>
-                                Customer e-mail
-                                <input type="text" id="order_customer_email"
-                                       class="form-control">
-                            </label>
-                        </div>
-                        <div class="row">
-                            <label>
-                                Shipping Address
-                                <input type="text" id="order_shipping_address"
-                                       class="form-control">
-                            </label>
-                        </div>
-                        <div class="row">
-                            <div class="checkbox">
-                                <label>
-                                    My billing addres is the same as my
-                                    shipping address
-                                    <input type="checkbox"
-                                           id="same_address_cbx">
+                            <div class="col-xs-4">
+                                <label for="order_customer_name">
+                                    Name
                                 </label>
                             </div>
-                            <label>
-                                Billing Address
+                            <div class="col-xs-8">
+                               <input type="text" id="order_customer_name"
+                                      class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_customer_email">
+                                    E-mail
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <input type="text" id="order_customer_email"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"
+                                               id="same_address_cbx">
+                                        My billing address and shipping
+                                        address are the same.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_shipping_address">
+                                    Shipping Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <input type="text" id="order_shipping_address"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_billing_address">
+                                    Billing Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
                                 <input type="text" id="order_billing_address"
                                        class="form-control">
-                            </label>
+                            </div>
                         </div>
                     </div>
                     <!--/.container fluid-->
@@ -253,7 +410,6 @@
             src="{{ url_for('static', filename='js/catalog.js') }}">
     </script>
     <div id="catalog-view">
-        {#        <form role="form" action="catalog_action" method="post">#}
         <table class="table table-striped">
             <thead>
             <th><!--icon--></th>

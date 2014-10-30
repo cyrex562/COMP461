@@ -4,9 +4,6 @@
 @author Josh Madden <madden07@email.franklin.edu>
 @license MIT license
 """
-# ###############################################################################
-# IMPORTS
-# ###############################################################################
 import atexit
 import os
 import pickle
@@ -24,18 +21,15 @@ import data_gateway
 from model_objects import Customer, Cart, CartItem
 from model_ops import get_user_by_id, get_user_by_username, \
     get_customer_by_username, get_all_apps, get_app_by_id, \
-    get_apps_for_cart_items, update_item_subtotals, update_cart_total
-from controller_ops import register_user
+    get_apps_for_cart_items, update_item_subtotals, update_cart_total, \
+    register_user, adjust_inventory
 import model_ops
-
-
-################################################################################
-# DEFINES
-################################################################################
 from model_xml import user_data_loader, customer_data_loader, app_data_loader, \
-    user_data_storage_handler, customer_data_storage_handler, \
-    app_data_storage_handler, order_data_loader, order_data_storage_handler, \
+    order_data_loader, \
     load_data_handlers, store_data_handlers, load_data
+from model_persistence import user_data_storage_handler, \
+    customer_data_storage_handler, app_data_storage_handler, \
+    order_data_storage_handler
 import model_xml
 
 
@@ -127,9 +121,6 @@ data_gateway.init_data_gateway()
 load_data()
 
 
-################################################################################
-# FUNCTIONS
-################################################################################
 @login_manager.user_loader
 def load_user(user_id):
     user_result = get_user_by_id(user_id)
@@ -190,34 +181,6 @@ def account_page_controller():
         return render_template('account.html', **template_values)
 
 
-@app.route('/catalog_action', methods=['GET', 'POST'])
-def item_details_page_controller():
-    """
-    item details view page controller
-    :return:
-    """
-    template_values = get_template_values('item_details')
-    if request.method == 'GET':
-        return render_template('app_details.html', **template_values)
-    elif request.method == 'POST':
-        json = request.json
-        if request.form['form_action'] == 'add_to_cart':
-            cart = session.get('cart', Cart())
-            cart_item = CartItem()
-            cart_item.quantity = int(request.form['quantity'])
-            cart_item.app_id = request.form['app_id']
-            cart.items.append(cart_item)
-            total_cart_items = 0
-            for item in cart.items:
-                total_cart_items += item.quantity
-            return jsonpickle.encode({'total_cart_items': total_cart_items})
-        elif request.form['form_action'] == 'get_app_detils':
-            app_id = int(request.form['app_id'])
-            sel_app = get_app_by_id(app_id)
-            template_values['app'] = sel_app
-            return render_template('app_details.html', **template_values)
-
-
 @app.route('/app', methods=['POST'])
 def get_app_details():
     """
@@ -238,18 +201,6 @@ def landing_page_controller():
     """
     template_values = get_template_values('landing')
     return render_template('landing.html', **template_values)
-
-
-@app.route('/order_details', methods=['GET', 'POST'])
-@login_required
-def order_details_page_controller():
-    """
-    order details page controller
-    :return:
-    """
-    template_values = get_template_values('order_details')
-    if request.method == 'GET':
-        return render_template('order_details.html', **template_values)
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -287,6 +238,7 @@ def change_cart_item_quantity():
 
 
 @app.route('/change_checkout_item_quantity', methods=['POST'])
+@login_required
 def change_order_item_quantity():
     if 'cart' not in session:
         session['cart'] = Cart()
@@ -330,7 +282,22 @@ def remove_item_from_cart():
     return jsonpickle.encode(result)
 
 
+@app.route('/clear_cart', methods=['POST'])
+def clear_cart():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    cart = model_ops.clear_cart(cart)
+    cart = update_item_subtotals(cart)
+    cart = update_cart_total(cart)
+    session['cart'] = cart
+    session.modified = True
+    result = {'message': 'success', 'data': {'cart': cart}}
+    return jsonpickle.encode(result)
+
+
 @app.route('/remove_item_from_checkout', methods=['POST'])
+@login_required
 def remove_item_from_checkout():
     if 'cart' not in session:
         session['cart'] = Cart()
@@ -379,6 +346,7 @@ def get_cart():
 
 
 @app.route('/get_checkout_data', methods=['POST'])
+@login_required
 def get_checkout_data():
     if 'cart' not in session:
         session['cart'] = Cart()
@@ -391,6 +359,35 @@ def get_checkout_data():
                                              'handling_fee': handling_fee,
                                              'order_total': order_total,
                                              'tax': tax}}
+    return jsonpickle.encode(result, unpicklable=False)
+
+
+@app.route('/place_order', methods=['POST'])
+@login_required
+def place_order():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    customer = get_customer_by_username(current_user.username)
+    handling_fee = model_ops.get_handling_fee(cart)
+    tax = model_ops.calc_order_tax(cart, handling_fee)
+    order_total = model_ops.calc_order_total(cart, tax, handling_fee)
+    stock_result = model_ops.check_stock(cart)
+    billing_address = request.json['billing_address']
+    shipping_address = request.json['shipping_address']
+    if len(stock_result) > 0:
+        result = {'message': 'failure, invalid app quantity', 'data': {
+            'invalid_items': stock_result}}
+    else:
+        order = model_ops.place_order(customer, cart, handling_fee, tax,
+                    order_total, shipping_address, billing_address)
+        adjust_inventory(cart)
+        result = {'message': 'success', 'data': {'order': order, 'customer':
+            customer, 'cart': cart }}
+        cart = model_ops.clear_cart(cart)
+        session['cart'] = cart
+        session.modified = True
+
     return jsonpickle.encode(result, unpicklable=False)
 
 
@@ -413,15 +410,13 @@ def register_page_controller():
             return render_template('register.html', **template_values)
 
 
-@app.route('/reset_password', methods=['GET', 'POST'])
+@app.route('/reset_password', methods=['POST'])
 def reset_password_page_controller():
     """
     reset password view page controller
     :return:
     """
-    template_values = get_template_values('reset_password')
-    if request.method == 'GET':
-        return render_template('reset_password.html', **template_values)
+    pass
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -475,10 +470,11 @@ def logout_page_controller():
 
 @app.route('/user_logged_in', methods=['POST'])
 def user_logged_in():
-    user_logged_in = 0
+    is_user_logged_in = 0
     if current_user.is_authenticated():
-        user_logged_in = 1
-    result = {'message': 'success', 'data': {'user_logged_in': user_logged_in}}
+        is_user_logged_in = 1
+    result = {'message': 'success',
+              'data': {'user_logged_in': is_user_logged_in}}
     return jsonpickle.encode(result)
 
 
@@ -495,16 +491,8 @@ def sigterm_handler(signum, frame):
     model_xml.store_data()
 
 
-################################################################################
-# ENTRY POINT
-################################################################################
 if __name__ == '__main__':
     atexit.register(exit_handler)
     signal.signal(signal.SIGTERM, sigterm_handler)
     signal.signal(signal.SIGINT, sigterm_handler)
     app.run()
-
-
-################################################################################
-# END OF FILE
-################################################################################
