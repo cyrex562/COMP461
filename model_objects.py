@@ -92,6 +92,20 @@ class App(object):
         self.price = 0
 
 
+class Order(object):
+    """
+    Customer order
+    """
+    def __init__(self):
+        self.id = 0
+        self.items = []
+        self.handling_fee = 0.0
+        self.tax_amount = 0.0
+        self.total_cost = 0.0
+        self.subtotal = 0.0
+        self.customer_id = 0
+
+
 ###############################################################################
 # END OF FILE
 ###############################################################################

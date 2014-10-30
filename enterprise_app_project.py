@@ -20,20 +20,23 @@ from flask.sessions import SessionMixin, SessionInterface
 import jsonpickle
 from redis import Redis
 from werkzeug.datastructures import CallbackDict
-from config import SECRET_KEY
-from data_gateway import load_data_handlers, table_names, store_data, \
-    init_data_gateway, load_data, store_data_handlers
+import data_gateway
 from model_objects import Customer, Cart, CartItem
-from model_ops import get_user_by_id, user_data_loader, get_user_by_username, \
-    customer_data_loader, user_data_storage_handler, \
-    customer_data_storage_handler, get_customer_by_username, app_data_loader, \
-    app_data_storage_handler, get_all_apps, get_app_by_id, \
+from model_ops import get_user_by_id, get_user_by_username, \
+    get_customer_by_username, get_all_apps, get_app_by_id, \
     get_apps_for_cart_items, update_item_subtotals, update_cart_total
 from controller_ops import register_user
-# ###############################################################################
+import model_ops
+
+
+################################################################################
 # DEFINES
 ################################################################################
-import model_ops
+from model_xml import user_data_loader, customer_data_loader, app_data_loader, \
+    user_data_storage_handler, customer_data_storage_handler, \
+    app_data_storage_handler, order_data_loader, order_data_storage_handler, \
+    load_data_handlers, store_data_handlers, load_data
+import model_xml
 
 
 class RedisSession(CallbackDict, SessionMixin):
@@ -105,19 +108,22 @@ login_manager.init_app(app)
 load_data_handlers.append(user_data_loader)
 load_data_handlers.append(customer_data_loader)
 load_data_handlers.append(app_data_loader)
+load_data_handlers.append(order_data_loader)
 
 # ** configure table names
-table_names.append('users')
-table_names.append('customers')
-table_names.append('apps')
+data_gateway.table_names.append('users')
+data_gateway.table_names.append('customers')
+data_gateway.table_names.append('apps')
+data_gateway.table_names.append('orders')
 
 # ** configure storage handlers
 store_data_handlers.append(user_data_storage_handler)
 store_data_handlers.append(customer_data_storage_handler)
 store_data_handlers.append(app_data_storage_handler)
+store_data_handlers.append(order_data_storage_handler)
 
 # ** run tdg initializer
-init_data_gateway()
+data_gateway.init_data_gateway()
 load_data()
 
 
@@ -182,29 +188,6 @@ def account_page_controller():
 
     if request.method == 'GET':
         return render_template('account.html', **template_values)
-
-
-# @app.route('/cart', methods=['GET', 'POST'])
-# def cart_page_controller():
-#     """
-#     shopping cart page controller
-#     :return:
-#     """
-#     template_values = get_template_values('cart')
-#     if request.method == 'GET':
-#         return render_template('cart.html', **template_values)
-
-
-@app.route('/checkout', methods=['GET', 'POST'])
-@login_required
-def checkout_page_controller():
-    """
-    checkout view page controller
-    :return:
-    """
-    template_values = get_template_values('checkout')
-    if request.method == 'GET':
-        return render_template('checkout.html', **template_values)
 
 
 @app.route('/catalog_action', methods=['GET', 'POST'])
@@ -297,10 +280,9 @@ def change_cart_item_quantity():
     cart = update_cart_total(cart)
     session['cart'] = cart
     session.modified = True
-    return jsonpickle.encode({'message': 'success', 'data': {'cart': cart,
-                                                             'app_id':
-                                                                 request.json[
-                                                                     'app_id']}})
+    response = {'message': 'success',
+                'data': {'cart': cart, 'app_id': request.json['app_id']}}
+    return jsonpickle.encode(response)
 
 
 @app.route('/remove_item_from_cart', methods=['POST'])
@@ -313,9 +295,10 @@ def remove_item_from_cart():
     cart = update_cart_total(cart)
     session['cart'] = cart
     session.modified = True
-    return jsonpickle.encode({'message': 'success',
-                              'data': {'cart': cart,
-                                       'app_id': request.json['app_id']}})
+    return jsonpickle.encode({'message': 'success', 'data': {'cart': cart,
+                                                             'app_id':
+                                                                 request.json[
+                                                                     'app_id']}})
 
 
 @app.route('/cart_items_count', methods=['POST'])
@@ -339,6 +322,22 @@ def get_cart():
     cart = update_cart_total(cart)
     return jsonpickle.encode({'message': 'success', 'data': {'cart': cart}},
                              unpicklable=False)
+
+
+@app.route('/get_checkout_data', methods=['POST'])
+def get_checkout_data():
+    if 'cart' not in session:
+        session['cart'] = Cart()
+    cart = session['cart']
+    customer = get_customer_by_username(current_user.username)
+    handling_fee = model_ops.get_handling_fee(cart)
+    tax = model_ops.calc_order_tax(cart, handling_fee)
+    order_total = model_ops.calc_order_total(cart, tax, handling_fee)
+    result = {'message': 'success', 'data': {'customer': customer, 'cart': cart,
+                                             'handling_fee': handling_fee,
+                                             'order_total': order_total,
+                                             'tax': tax}}
+    return jsonpickle.encode(result, unpicklable=False)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -420,28 +419,37 @@ def logout_page_controller():
     return redirect(url_for('catalog_page_controller'))
 
 
+@app.route('/user_logged_in', methods=['POST'])
+def user_logged_in():
+    user_logged_in = 0
+    if current_user.is_authenticated():
+        user_logged_in = 1
+    result = {'message': 'success', 'data': {'user_logged_in': user_logged_in}}
+    return jsonpickle.encode(result)
+
+
 def exit_handler():
     """
     a program exit handler to facilitate cleanup and persisting data to the
     xml object store
     :return:
     """
-    store_data()
+    model_xml.store_data()
 
 
 def sigterm_handler(signum, frame):
-    store_data()
+    model_xml.store_data()
 
-
-atexit.register(exit_handler)
-signal.signal(signal.SIGTERM, sigterm_handler)
-signal.signal(signal.SIGINT, sigterm_handler)
 
 ################################################################################
 # ENTRY POINT
 ################################################################################
 if __name__ == '__main__':
+    atexit.register(exit_handler)
+    signal.signal(signal.SIGTERM, sigterm_handler)
+    signal.signal(signal.SIGINT, sigterm_handler)
     app.run()
+
 
 ################################################################################
 # END OF FILE

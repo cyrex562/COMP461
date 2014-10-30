@@ -10,15 +10,16 @@ from bs4 import BeautifulSoup
 ################################################################################
 # DEFINES
 ################################################################################
+from model_xml import store_data_handlers
 from utils import log_msg
+import utils
 
-XML_FILE = 'data.xml'
+
 
 REDIS_KEY = 'ent_app_proj'
 
 redis_ctx = None
-load_data_handlers = []
-store_data_handlers = []
+
 table_names = []
 
 
@@ -34,37 +35,6 @@ def init_data_gateway():
     redis_ctx = redis.StrictRedis()
     log_msg('debug', 'init_data_gateway, flushing in-memory store')
     redis_ctx.flushdb()
-
-
-def load_data():
-    """
-    Load the persistent data from the data xml file.
-    :return: void
-    """
-    soup = BeautifulSoup(open(os.getcwd() + '/enterprise_app_project/' +
-                              XML_FILE), "xml")
-    for f in load_data_handlers:
-        f(soup)
-
-
-def store_data():
-    """
-    Store in-memory data to the data xml file
-    :return:
-    """
-    # create a new xml document
-    soup = BeautifulSoup()
-    soup.append(soup.new_tag('data'))
-    soup.data.append(soup.new_tag('users'))
-    soup.data.append(soup.new_tag('customers'))
-    soup.data.append(soup.new_tag('products'))
-    for f in store_data_handlers:
-        f(soup)
-    out_xml = soup.prettify()
-    xml_file = open(os.getcwd() + '/enterprise_app_project/' +
-                    XML_FILE, 'wb')
-    xml_file.write(out_xml)
-    xml_file.close()
 
 
 def get_table(table_name):

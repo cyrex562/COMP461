@@ -15,13 +15,13 @@
                         <div class="row">
                             <table class="table table-striped" id="cart_table">
                                 <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Subtotal</th>
-                                        <th></th>
-                                    </tr>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
                                 </thead>
                                 <tbody id="cart_table_body">
                                 </tbody>
@@ -29,24 +29,30 @@
                             <div><strong>Total: </strong><span
                                     id="cart_total"></span></div>
                         </div>
-                    </div><!--/.container fluid-->
-                </div><!--./modal body-->
+                    </div>
+                    <!--/.container fluid-->
+                </div>
+                <!--./modal body-->
                 <div class="modal-footer">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="btn-group">
                                 <button id="check_out_btn" class="btn
-                                btn-primary">Check Out</button>
+                                btn-primary">Check Out
+                                </button>
                                 <button id="continue_shopping_btn" class="btn
-                                btn-success">Continue Shopping</button>
+                                btn-success">Continue Shopping
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div><!--./modal-footer-->
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal --><!--/checkout_modall-->
-    <!-- checkout modal -->
+                </div>
+                <!--./modal-footer-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal --><!-- cart modal-->
     <div class="modal fade" id="checkout_modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -59,31 +65,92 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            TODO: order details
+                            <table class="table table-striped">
+                                <thead>
+                                <th>App Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                                <th></th>
+                                </thead>
+                                <tbody id="order_table_body"></tbody>
+                            </table>
                         </div>
                         <div class="row">
-                            TODO: shipping address
+                            <span>Order Subtotal</span>
+                            <span id="order_subtotal"></span>
                         </div>
                         <div class="row">
-                            TODO: checkbox for same as shipping address
-                            TODO: billing address
+                            <span>Handling Fee</span>
+                            <span id="order_handling_fee"></span>
                         </div>
-                    </div><!--/.container fluid-->
-                </div><!--./modal body-->
+                        <div class="row">
+                            <span>Tax</span>
+                            <span id="order_tax"></span>
+                        </div>
+                        <div class="row">
+                            <span>Order Total</span>
+                            <span id="order_total"></span>
+                        </div>
+                        <div class="row">
+                            <label>
+                                Customer Name
+                                <input type="text" id="order_customer_name"
+                                       class="form-control">
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label>
+                                Customer e-mail
+                                <input type="text" id="order_customer_email"
+                                       class="form-control">
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label>
+                                Shipping Address
+                                <input type="text" id="order_shipping_address"
+                                       class="form-control">
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="checkbox">
+                                <label>
+                                    My billing addres is the same as my
+                                    shipping address
+                                    <input type="checkbox"
+                                           id="same_address_cbx">
+                                </label>
+                            </div>
+                            <label>
+                                Billing Address
+                                <input type="text" id="order_billing_address"
+                                       class="form-control">
+                            </label>
+                        </div>
+                    </div>
+                    <!--/.container fluid-->
+                </div>
+                <!--./modal body-->
                 <div class="modal-footer">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="btn-group">
                                 <button id="cancel_order_btn" class="btn
-                                btn-warning">Cancel Order</button>
+                                btn-warning">Cancel Order
+                                </button>
                                 <button id="place_order_btn" class="btn
-                                btn-primary">Place Order</button>
+                                btn-primary">Place Order
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div><!--./modal-footer-->
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+                </div>
+                <!--./modal-footer-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div><!-- /.modal --><!--/checkout_modall-->
     <!-- app details modal -->
     <div class="modal fade" id="app_details_modal">
@@ -150,7 +217,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-1">
-                                <label>Qty</label>
+                                <label for="app_details_modal_quantity">Qty</label>
                             </div>
                             <div class="col-xs-2">
                                 <input type="number" min="1"

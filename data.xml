@@ -1,152 +1,156 @@
 <data>
- <users>
-  <user id="0" user_type="admin">
-   <username>
-    admin
-   </username>
-   <password>
-    admin
-   </password>
-  </user>
-  <user id="1" user_type="user">
-   <username>
-    test_user
-   </username>
-   <password>
-    test
-   </password>
-  </user>
-  <user id="2" user_type="user">
-   <username>
-    test1
-   </username>
-   <password>
-    test1
-   </password>
-  </user>
- </users>
- <customers>
-  <customer id="0">
-   <user_id>
-    2
-   </user_id>
-   <billing_address>
-    1234 a st, a city, aa, 12345
-   </billing_address>
-   <shipping_address>
-    1234 a st, a city, aa, 12345
-   </shipping_address>
-   <email_address>
-    test@test.com
-   </email_address>
-   <person_name>
-    test
-   </person_name>
-   <rating>
-    0
-   </rating>
-   <orders>
-       <order id="0">
-           <order_item>
-               <app_id>0</app_id>
-               <quantity>1</quantity>
-               <subtotal_cost>0.99</subtotal_cost>
-           </order_item>
-           <order_shipping_cost>1.99</order_shipping_cost>
-           <order_tax_amount>0.50</order_tax_amount>
-           <order_total_cost>3.49</order_total_cost>
-       </order>
-   </orders>
-  </customer>
- </customers>
- <apps>
-     <app id="0">
-         <app_name>Text messaging app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="1">
-         <app_name>Multimedia player app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="2">
-         <app_name>Softphone app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="3">
-         <app_name>Mapping app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="4">
-         <app_name>Radio communications app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="5">
-         <app_name>File sharing app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="6">
-         <app_name>Video recording app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
-     <app id="7">
-         <app_name>Secure file storage app</app_name>
-         <download_link>NOT SET</download_link>
-         <app_publisher>NOT SET</app_publisher>
-         <app_description>NOT SET</app_description>
-         <license_count>20</license_count>
-         <platform>Android</platform>
-         <platform_requirements>NOT SET</platform_requirements>
-         <app_image>generic_app_icon.png</app_image>
-         <price>0.99</price>
-     </app>
- </apps>
+    <users>
+        <user id="0" user_type="admin">
+            <username>
+                admin
+            </username>
+            <password>
+                admin
+            </password>
+        </user>
+        <user id="1" user_type="user">
+            <username>
+                test_user
+            </username>
+            <password>
+                test
+            </password>
+        </user>
+        <user id="2" user_type="user">
+            <username>
+                test1
+            </username>
+            <password>
+                test1
+            </password>
+        </user>
+    </users>
+    <customers>
+        <customer id="0">
+            <user_id>
+                2
+            </user_id>
+            <billing_address>
+                1234 a st, a city, aa, 12345
+            </billing_address>
+            <shipping_address>
+                1234 a st, a city, aa, 12345
+            </shipping_address>
+            <email_address>
+                test@test.com
+            </email_address>
+            <person_name>
+                test
+            </person_name>
+            <rating>
+                0
+            </rating>
+        </customer>
+    </customers>
+    <orders>
+        <order id="0">
+            <items>
+                <order_item>
+                    <app_id>0</app_id>
+                    <quantity>1</quantity>
+                    <subtotal>0.99</subtotal>
+                </order_item>
+            </items>
+            <order_handling_fee>1.99</order_handling_fee>
+            <order_tax_amount>0.50</order_tax_amount>
+            <order_total_cost>3.49</order_total_cost>
+            <order_subtotal>0.99</order_subtotal>
+            <order_customer_id>0</order_customer_id>
+        </order>
+    </orders>
+    <apps>
+        <app id="0">
+            <app_name>Text messaging app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="1">
+            <app_name>Multimedia player app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="2">
+            <app_name>Softphone app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="3">
+            <app_name>Mapping app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="4">
+            <app_name>Radio communications app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="5">
+            <app_name>File sharing app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="6">
+            <app_name>Video recording app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+        <app id="7">
+            <app_name>Secure file storage app</app_name>
+            <download_link>NOT SET</download_link>
+            <app_publisher>NOT SET</app_publisher>
+            <app_description>NOT SET</app_description>
+            <license_count>20</license_count>
+            <platform>Android</platform>
+            <platform_requirements>NOT SET</platform_requirements>
+            <app_image>generic_app_icon.png</app_image>
+            <price>0.99</price>
+        </app>
+    </apps>
 </data>
