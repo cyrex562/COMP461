@@ -115,7 +115,7 @@ app.debug = True
 app.secret_key = os.urandom(24)
 app.session_interface = RedisSessionInterface()
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = 'login_page_controller'
 login_manager.init_app(app)
 
 # * model initialization
@@ -169,7 +169,7 @@ def default_page_controller():
     page controller for default application route
     :return:
     """
-    return redirect(url_for('catalog_page_controller'))
+    return redirect(url_for('landing_page_controller'))
 
 
 @app.route('/catalog', methods=['GET', 'POST'])
@@ -207,7 +207,12 @@ def account_page_controller():
     template_values['email'] = customer.email_address
     template_values['rating'] = customer.rating
     template_values['username'] = current_user.username
-    template_values['orders'] = model_ops.get_orders_by_customer_id(customer.id)
+    orders = model_ops.get_orders_by_customer_id(customer.id)
+    orders_with_apps = []
+    for order in orders:
+        order_with_apps = model_ops.get_apps_for_order(order)
+        orders_with_apps.append(order_with_apps)
+    template_values['orders'] = orders_with_apps
 
     return render_template('account.html', **template_values)
 
@@ -282,7 +287,7 @@ def change_order_item_quantity():
     cart = update_cart_total(cart)
     session.modified = True
     customer = get_customer_by_username(current_user.username)
-    handling_fee = model_ops.get_handling_fee(cart)
+    handling_fee = model_ops.get_handling_fee(cart, customer)
     tax = model_ops.calc_order_tax(cart, handling_fee)
     order_total = model_ops.calc_order_total(cart, tax, handling_fee)
     result = {'message': 'success',
@@ -339,7 +344,7 @@ def remove_item_from_checkout():
     session['cart'] = cart
     session.modified = True
     customer = get_customer_by_username(current_user.username)
-    handling_fee = model_ops.get_handling_fee(cart)
+    handling_fee = model_ops.get_handling_fee(cart, customer)
     tax = model_ops.calc_order_tax(cart, handling_fee)
     order_total = model_ops.calc_order_total(cart, tax, handling_fee)
     result = {'message': 'success',
@@ -383,7 +388,7 @@ def get_checkout_data():
         session['cart'] = Cart()
     cart = session['cart']
     customer = get_customer_by_username(current_user.username)
-    handling_fee = model_ops.get_handling_fee(cart)
+    handling_fee = model_ops.get_handling_fee(cart, customer)
     tax = model_ops.calc_order_tax(cart, handling_fee)
     order_total = model_ops.calc_order_total(cart, tax, handling_fee)
     result = {'message': 'success', 'data': {'customer': customer, 'cart': cart,
@@ -400,7 +405,7 @@ def place_order():
         session['cart'] = Cart()
     cart = session['cart']
     customer = get_customer_by_username(current_user.username)
-    handling_fee = model_ops.get_handling_fee(cart)
+    handling_fee = model_ops.get_handling_fee(cart, customer)
     tax = model_ops.calc_order_tax(cart, handling_fee)
     order_total = model_ops.calc_order_total(cart, tax, handling_fee)
     stock_result = model_ops.check_stock(cart)
@@ -412,13 +417,29 @@ def place_order():
     else:
         order = model_ops.place_order(customer, cart, handling_fee, tax,
                     order_total, shipping_address, billing_address)
+        model_ops.update_customer_rating(customer)
         adjust_inventory(cart)
-        result = {'message': 'success', 'data': {'order': order, 'customer':
-            customer, 'cart': cart}}
+        result = {'message': 'success', 'data': {'order': order,
+                 'customer': customer}}
         cart = model_ops.clear_cart(cart)
         session['cart'] = cart
         session.modified = True
 
+    return jsonpickle.encode(result, unpicklable=False)
+
+
+@app.route('/get_order', methods=['POST'])
+@login_required
+def get_order():
+    """
+    get order and customer data for the order.
+    :return:
+    """
+    order = model_ops.get_order_by_id(int(request.json['order_id']))
+    customer = model_ops.get_customer_by_id(order.customer_id)
+    order_with_apps = model_ops.get_apps_for_order(order)
+    result = {'message': 'success', 'data': {'order': order_with_apps,
+        'customer': customer}}
     return jsonpickle.encode(result, unpicklable=False)
 
 
@@ -434,10 +455,8 @@ def register_page_controller():
     elif request.method == 'POST':
         success = register_user(request)
         if success:
-            # TODO: redirect user to catalog page and prompt them to log in
             return redirect(url_for('catalog_page_controller'))
         else:
-            # TODO: indicate an error occurred
             return render_template('register.html', **template_values)
 
 

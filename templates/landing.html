@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
 <div id="landing-page">
-    <p>landing page</p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-11">
+                <div class="jumbotron">
+                    <h1>Enterprise App Store</h1>
+                    <p>This site provides a private Enteprise App Store that
+                        enables authorized users to view and download apps
+                        for their devices. It manages the number of licenses
+                        authorized for each app.
+                    </p>
+                    <p>
+                        <a class="btn btn-primary btn-lg"
+                           href="{{ url_for('catalog_page_controller') }}"
+                            role="button">Learn more</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-{% endlbock %}
+{% endblock %}

@@ -95,7 +95,7 @@ def get_app_by_id(in_app_id):
     found_app = None
     apps = get_all_apps()
     for a in apps:
-        if a.id == in_app_id:
+        if str(a.id) == str(in_app_id):
             found_app = a
             break
     return found_app
@@ -135,7 +135,7 @@ def get_next_order_id():
     orders = get_all_orders()
     next_order_id = 0
     for o in orders:
-        if int(o.id) > next_order_id:
+        if int(o.id) >= next_order_id:
             next_order_id = int(o.id) + 1
     return next_order_id
 
@@ -180,6 +180,16 @@ def get_customer_by_username(username):
             if user.id == customer.user_id:
                 found_customer = customer
                 break
+    return found_customer
+
+
+def get_customer_by_id(customer_id):
+    found_customer = None
+    customers = get_all_customers()
+    for c in customers:
+        if str(c.id) == str(customer_id):
+            found_customer = c
+            break
     return found_customer
 
 
@@ -300,13 +310,16 @@ def change_cart_item_quantity(cart, app_id, new_quantity):
     return cart
 
 
-def get_handling_fee(cart):
+def get_handling_fee(cart, customer):
     """
     Get the handling fee
     :param cart:
     :return:
     """
-    return round(cart.total * 0.2, 2)
+    handling_fee = round(cart.total * 0.2, 2)
+    if customer.rating.lower() == 'premium':
+        handling_fee = 0.0
+    return handling_fee
 
 
 def calc_order_tax(cart, handling_fee):
@@ -374,6 +387,19 @@ def place_order(customer, cart, handling_fee, tax, order_total,
     return order
 
 
+def update_customer_rating(customer):
+    customers = get_all_customers()
+    new_rating = 'regular'
+    customer_orders = get_orders_by_customer_id(customer.id)
+    if len(customer_orders) > 5:
+        new_rating = 'premium'
+    for i in range(0, len(customers) - 1):
+        if str(customers[i].id) == str(customer.id):
+            customers[i].rating = new_rating
+            break
+    set_table('customers', customers)
+
+
 def update_app_license_count(app, new_license_count):
     """
     Update the license count for the app.
@@ -438,3 +464,25 @@ def get_orders_by_customer_id(customer_id):
         if str(order.customer_id) == str(customer_id):
             result.append(order)
     return result
+
+
+def get_order_by_id(order_id):
+    """
+    Get an order by its id
+    :param order_id:
+    :return:
+    """
+    result = None
+    orders = get_all_orders()
+    for order in orders:
+        if str(order.id) == str(order_id):
+            result = order
+            break
+    return result
+
+
+def get_apps_for_order(order):
+    for item in order.items:
+        if item.app is None:
+            item.app = get_app_by_id(item.app_id)
+    return order

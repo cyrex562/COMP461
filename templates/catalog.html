@@ -12,10 +12,8 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="order_customer_id">
-
                     <h3>Items Ordered:</h3>
-                    <table class="table table-striped">
-                        <thead>
+                    <table class="table table-striped" id="order_details_table">
                         <tr>
                             <th>App Name</th>
                             <th>Quantity</th>
@@ -23,8 +21,6 @@
                             <th>Subtotal</th>
                             <th></th>
                         </tr>
-                        </thead>
-                        <tbody id="order_table_body"></tbody>
                     </table>
                     <div class="container-fluid">
                         <div class="row">
@@ -132,8 +128,7 @@
                     <h4 class="modal-title">Shopping Cart</h4>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-striped">
-                        <thead>
+                    <table class="table table-striped" id="cart_table">
                         <tr>
                             <th>Item</th>
                             <th>Quantity</th>
@@ -141,8 +136,6 @@
                             <th>Subtotal</th>
                             <th></th>
                         </tr>
-                        </thead>
-                        <tbody id="cart_table_body"></tbody>
                     </table>
                     <div>
                         <strong>Total: </strong>
@@ -188,17 +181,14 @@
                 </div>
                 <div class="modal-body">
                     <input type="hidden" value="" id="order_customer_id">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>App Name</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Subtotal</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="order_table_body"></tbody>
+                    <table class="table table-striped" id="order_table">
+                        <tr>
+                            <th>App Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
                     </table>
                     <div id="order_errors"></div>
                     <div class="container-fluid">
@@ -442,7 +432,16 @@
                     </td>
                     <td>{{ a.app_name }}</td>
                     <td>${{ a.price }}</td>
-                    <td>{{ a.license_count }} License(s) available</td>
+                    {%  if a.license_count == 0 %}
+                        <td class="danger">{{ a.license_count }} License(s)
+                            available</td>
+                    {%  elif a.license_count < 5 %}
+                        <td class="warning">{{ a.license_count }} License(s)
+                            available</td>
+                    {%  else %}
+                        <td>{{ a.license_count }} License(s) available</td>
+                    {% endif %}
+
                     <td>
                         <label>
                             Quantity:

@@ -114,6 +114,10 @@ def order_data_loader(soup):
                 order_xml.order_subtotal))
             order_to_add.customer_id = int(get_xml_tag_string(
                 order_xml.order_customer_id))
+            order_to_add.billing_address = get_xml_tag_string(
+                order_xml.order_billing_address)
+            order_to_add.shipping_address = get_xml_tag_string(
+                order_xml.order_shipping_address)
             for item_xml in order_xml.items.children:
                 if item_xml.string != '\n':
                     item_to_add = CartItem()

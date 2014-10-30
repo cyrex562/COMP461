@@ -83,6 +83,10 @@ def order_data_storage_handler(soup):
         append_xml_tag(soup, new_order_tag, 'order_subtotal', str(o.subtotal))
         append_xml_tag(soup, new_order_tag, 'order_customer_id',
                        str(o.customer_id))
+        append_xml_tag(soup, new_order_tag, 'order_shipping_address',
+                       o.shipping_address)
+        append_xml_tag(soup, new_order_tag, 'order_billing_address',
+                       o.billing_address)
         items_tag = soup.new_tag('items')
         new_order_tag.append(items_tag)
         for i in o.items:

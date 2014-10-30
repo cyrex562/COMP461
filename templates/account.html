@@ -1,5 +1,115 @@
 {% extends "base.html" %}
 {% block body %}
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/account.js') }}">
+    </script>
+    <div class="modal fade" id="order_history_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Order Details</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="order_customer_id">
+                    <h3>Items Ordered:</h3>
+                    <table class="table table-striped"
+                           id="order_history_details_table">
+                        <tr>
+                            <th>App Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </table>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Order Subtotal</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_subtotal"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Handling Fee</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_handling_fee"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Tax</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_tax"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Order Total</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <span id="order_details_total"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_customer_name">
+                                    Name
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_customer_name"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_customer_email">
+                                    E-mail
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_customer_email"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_shipping_address">
+                                    Shipping Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_shipping_address"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <label for="order_details_billing_address">
+                                    Billing Address
+                                </label>
+                            </div>
+                            <div class="col-xs-8">
+                                <span id="order_details_billing_address"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/.container fluid-->
+                </div>
+                <!--./modal body-->
+                <div class="modal-footer">
+                </div>
+                <!--./modal-footer-->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal --><!--/order_history_modal-->
     <div>
         <fieldset id="user-information">
             <legend>User Information</legend>
@@ -77,11 +187,12 @@
                 </thead>
                 <tbody id="order_history_table_body">
                 {% for order in orders %}
-                    <tr id="order_row_{{ order.id }}">
+                    <tr id="{{ order.id }}" class="order_row">
                         <td>{{ order.id }}</td>
                         <td>
                             {% for item in order.items %}
-                                {{ item.quantity }}x {{ item.app_name }}
+                                {{ item.quantity }}x
+                                {{ item.app.app_name }}&nbsp;<br>
                             {% endfor %}
                         </td>
                         <td>{{ order.shipping_address }}</td>

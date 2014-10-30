@@ -52,7 +52,7 @@
     test
    </person_name>
    <rating>
-    0
+    premium
    </rating>
   </customer>
   <customer id="0">
@@ -72,7 +72,7 @@
     test
    </person_name>
    <rating>
-    0
+    standard
    </rating>
   </customer>
  </customers>
@@ -97,7 +97,7 @@
     NOT SET
    </app_description>
    <license_count>
-    11
+    13
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -126,7 +126,7 @@
     NOT SET
    </app_description>
    <license_count>
-    20
+    4
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -155,7 +155,7 @@
     NOT SET
    </app_description>
    <license_count>
-    20
+    14
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -184,7 +184,7 @@
     NOT SET
    </app_description>
    <license_count>
-    20
+    18
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -242,7 +242,7 @@
     NOT SET
    </app_description>
    <license_count>
-    20
+    0
    </license_count>
    <app_image>
     generic_app_icon.png
@@ -327,6 +327,12 @@
    <order_customer_id>
     0
    </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
    <items>
     <order_item>
      <app_id>
@@ -341,7 +347,7 @@
     </order_item>
    </items>
   </order>
-  <order id="0">
+  <order id="1">
    <order_handling_fee>
     0.99
    </order_handling_fee>
@@ -357,6 +363,12 @@
    <order_customer_id>
     0
    </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
    <items>
     <order_item>
      <app_id>
@@ -371,7 +383,7 @@
     </order_item>
    </items>
   </order>
-  <order id="0">
+  <order id="2">
    <order_handling_fee>
     0.2
    </order_handling_fee>
@@ -387,6 +399,12 @@
    <order_customer_id>
     0
    </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
    <items>
     <order_item>
      <app_id>
@@ -401,7 +419,7 @@
     </order_item>
    </items>
   </order>
-  <order id="0">
+  <order id="3">
    <order_handling_fee>
     0.2
    </order_handling_fee>
@@ -417,6 +435,12 @@
    <order_customer_id>
     0
    </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
    <items>
     <order_item>
      <app_id>
@@ -431,7 +455,7 @@
     </order_item>
    </items>
   </order>
-  <order id="0">
+  <order id="4">
    <order_handling_fee>
     0.2
    </order_handling_fee>
@@ -447,10 +471,685 @@
    <order_customer_id>
     0
    </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
    <items>
     <order_item>
      <app_id>
       0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="5">
+   <order_handling_fee>
+    0.79
+   </order_handling_fee>
+   <order_tax_amount>
+    0.33
+   </order_tax_amount>
+   <order_total_cost>
+    5.08
+   </order_total_cost>
+   <order_subtotal>
+    3.96
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      2
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      3
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="6">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="7">
+   <order_handling_fee>
+    0.59
+   </order_handling_fee>
+   <order_tax_amount>
+    0.25
+   </order_tax_amount>
+   <order_total_cost>
+    3.81
+   </order_total_cost>
+   <order_subtotal>
+    2.97
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      2
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      3
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="8">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="9">
+   <order_handling_fee>
+    0.99
+   </order_handling_fee>
+   <order_tax_amount>
+    0.42
+   </order_tax_amount>
+   <order_total_cost>
+    6.36
+   </order_total_cost>
+   <order_subtotal>
+    4.95
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="10">
+   <order_handling_fee>
+    0.59
+   </order_handling_fee>
+   <order_tax_amount>
+    0.25
+   </order_tax_amount>
+   <order_total_cost>
+    3.81
+   </order_total_cost>
+   <order_subtotal>
+    2.97
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="11">
+   <order_handling_fee>
+    0.59
+   </order_handling_fee>
+   <order_tax_amount>
+    0.25
+   </order_tax_amount>
+   <order_total_cost>
+    3.81
+   </order_total_cost>
+   <order_subtotal>
+    2.97
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="12">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      2
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="13">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      0
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="14">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="15">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="16">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="17">
+   <order_handling_fee>
+    0.2
+   </order_handling_fee>
+   <order_tax_amount>
+    0.08
+   </order_tax_amount>
+   <order_total_cost>
+    1.27
+   </order_total_cost>
+   <order_subtotal>
+    0.99
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      1
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+   </items>
+  </order>
+  <order id="18">
+   <order_handling_fee>
+    0.59
+   </order_handling_fee>
+   <order_tax_amount>
+    0.25
+   </order_tax_amount>
+   <order_total_cost>
+    3.81
+   </order_total_cost>
+   <order_subtotal>
+    2.97
+   </order_subtotal>
+   <order_customer_id>
+    0
+   </order_customer_id>
+   <order_shipping_address>
+    1234 a st, a city, aa, 12345
+   </order_shipping_address>
+   <order_billing_address>
+    1234 a st, a city, aa, 12345
+   </order_billing_address>
+   <items>
+    <order_item>
+     <app_id>
+      2
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      2
+     </app_id>
+     <quantity>
+      1
+     </quantity>
+     <subtotal>
+      0.99
+     </subtotal>
+    </order_item>
+    <order_item>
+     <app_id>
+      2
      </app_id>
      <quantity>
       1
